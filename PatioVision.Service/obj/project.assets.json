@@ -1,0 +1,124 @@
+{
+  "version": 3,
+  "targets": {
+    "net9.0": {
+      "PatioVision.Core/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "compile": {
+          "bin/placeholder/PatioVision.Core.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/PatioVision.Core.dll": {}
+        }
+      },
+      "PatioVision.Data/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "dependencies": {
+          "PatioVision.Core": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/PatioVision.Data.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/PatioVision.Data.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "PatioVision.Core/1.0.0": {
+      "type": "project",
+      "path": "../PatioVision.Core/PatioVision.Core.csproj",
+      "msbuildProject": "../PatioVision.Core/PatioVision.Core.csproj"
+    },
+    "PatioVision.Data/1.0.0": {
+      "type": "project",
+      "path": "../PatioVision.Data/PatioVision.Data.csproj",
+      "msbuildProject": "../PatioVision.Data/PatioVision.Data.csproj"
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net9.0": [
+      "PatioVision.Core >= 1.0.0",
+      "PatioVision.Data >= 1.0.0"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\Evandro\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "C:\\Users\\Evandro\\OneDrive\\Área de Trabalho\\PatioVision\\PatioVision.Service\\PatioVision.Service.csproj",
+      "projectName": "PatioVision.Service",
+      "projectPath": "C:\\Users\\Evandro\\OneDrive\\Área de Trabalho\\PatioVision\\PatioVision.Service\\PatioVision.Service.csproj",
+      "packagesPath": "C:\\Users\\Evandro\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Evandro\\OneDrive\\Área de Trabalho\\PatioVision\\PatioVision.Service\\obj\\",
+      "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
+      "configFilePaths": [
+        "C:\\Users\\Evandro\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "net9.0"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "projectReferences": {
+            "C:\\Users\\Evandro\\OneDrive\\Área de Trabalho\\PatioVision\\PatioVision.Core\\PatioVision.Core.csproj": {
+              "projectPath": "C:\\Users\\Evandro\\OneDrive\\Área de Trabalho\\PatioVision\\PatioVision.Core\\PatioVision.Core.csproj"
+            },
+            "C:\\Users\\Evandro\\OneDrive\\Área de Trabalho\\PatioVision\\PatioVision.Data\\PatioVision.Data.csproj": {
+              "projectPath": "C:\\Users\\Evandro\\OneDrive\\Área de Trabalho\\PatioVision\\PatioVision.Data\\PatioVision.Data.csproj"
+            }
+          }
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
+      },
+      "SdkAnalysisLevel": "9.0.200"
+    },
+    "frameworks": {
+      "net9.0": {
+        "targetAlias": "net9.0",
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203/PortableRuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}

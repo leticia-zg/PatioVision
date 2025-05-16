@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PatioVision.Core\PatioVision.Core.csproj" />
+    <ProjectReference Include="..\PatioVision.Data\PatioVision.Data.csproj" />
+  </ItemGroup>
+
+</Project>
