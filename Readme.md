@@ -103,7 +103,7 @@ http://localhost:{porta}/swagger
 Cadastre um IOT de Pátio:
 
 ```http
-POST /api/Dispositivos
+POST /api/dispositivos
 Content-Type: application/json
 
 {
@@ -116,7 +116,7 @@ Content-Type: application/json
 Cadastre um Pátio:
 
 ```http
-POST /api/Patios
+POST /api/patios
 Content-Type: application/json
 {
   "nome": "Pátio Zona Leste",
@@ -130,7 +130,7 @@ Content-Type: application/json
 Cadastre um IOT de Moto:
 
 ```http
-POST /api/Dispositivos
+POST /api/dispositivos
 Content-Type: application/json
 {
   "tipo": "Moto",
@@ -142,7 +142,7 @@ Content-Type: application/json
 Cadastre uma Moto:
 
 ```http
-POST /api/Motos
+POST /api/motos
 Content-Type: application/json
 {
   "modelo": "PCX",
