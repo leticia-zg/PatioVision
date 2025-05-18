@@ -100,8 +100,6 @@ http://localhost:{porta}/swagger
 
 ## ✅ Exemplo de Fluxo
 
-**Requisição:**
-
 Cadastre um IOT de Pátio:
 
 ```http
