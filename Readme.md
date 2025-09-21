@@ -7,6 +7,8 @@
 - [Ana Carolina Reis Santana](https://www.linkedin.com/in/ana-carolina-santana-9a0a78232)
 - [Celina Alcântara do Carmo](https://www.linkedin.com/in/celinaalcantara)
 
+---
+
 ## 📌 Sobre o Projeto
 
 O **PatioVision** é uma aplicação que permite o rastreamento e gerenciamento de motocicletas estacionadas em diferentes pátios, por meio de dispositivos IoT.  
