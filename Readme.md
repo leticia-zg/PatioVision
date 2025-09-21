@@ -1,7 +1,7 @@
 
 # 🏍️ PatioVision
 
-## Integrantes:
+## ✍️ Integrantes:
 
 - [Letícia Zago de Souza](https://www.linkedin.com/in/letícia-zago-de-souza)
 - [Ana Carolina Reis Santana](https://www.linkedin.com/in/ana-carolina-santana-9a0a78232)
