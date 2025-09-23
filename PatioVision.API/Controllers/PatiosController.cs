@@ -2,6 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 using PatioVision.Core.Models;
 using PatioVision.Service.Services;
 using System;
+using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PatioVision.API.Controllers;
 
@@ -10,21 +13,35 @@ namespace PatioVision.API.Controllers;
 public class PatiosController : ControllerBase
 {
     private readonly PatioService _service;
+    private const int MaxPageSize = 100;
 
     public PatiosController(PatioService service)
     {
         _service = service;
     }
 
-    /// <summary>
-    /// Retorna todos os pátios cadastrados.
-    /// </summary>
     [HttpGet]
-    public IActionResult Get() => Ok(_service.ObterTodos());
+    public async Task<IActionResult> Get([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, CancellationToken ct = default)
+    {
+        if (pageNumber <= 0 || pageSize <= 0)
+            return BadRequest("pageNumber e pageSize devem ser maiores que 0.");
 
-    /// <summary>
-    /// Retorna um pátio por ID.
-    /// </summary>
+        if (pageSize > MaxPageSize)
+            pageSize = MaxPageSize;
+
+        var result = await _service.ObterPaginadoAsync(pageNumber, pageSize, ct);
+
+        Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(new
+        {
+            result.TotalItems,
+            result.PageNumber,
+            result.PageSize,
+            result.TotalPages
+        }));
+
+        return Ok(result.Items);
+    }
+
     [HttpGet("{id}")]
     public IActionResult GetById(Guid id)
     {
@@ -32,9 +49,6 @@ public class PatiosController : ControllerBase
         return patio is null ? NotFound() : Ok(patio);
     }
 
-    /// <summary>
-    /// Cria um novo pátio.
-    /// </summary>
     [HttpPost]
     public IActionResult Post([FromBody] Patio patio)
     {
@@ -43,9 +57,6 @@ public class PatiosController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = novo.PatioId }, novo);
     }
 
-    /// <summary>
-    /// Atualiza um pátio existente.
-    /// </summary>
     [HttpPut("{id}")]
     public IActionResult Put(Guid id, [FromBody] Patio patio)
     {
@@ -54,9 +65,6 @@ public class PatiosController : ControllerBase
         return atualizado ? Ok(patio) : NotFound();
     }
 
-    /// <summary>
-    /// Remove um pátio pelo ID.
-    /// </summary>
     [HttpDelete("{id}")]
     public IActionResult Delete(Guid id)
     {

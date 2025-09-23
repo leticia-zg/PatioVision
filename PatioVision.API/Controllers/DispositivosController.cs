@@ -2,6 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 using PatioVision.Core.Models;
 using PatioVision.Service.Services;
 using System;
+using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace PatioVision.API.Controllers;
 
@@ -10,6 +13,7 @@ namespace PatioVision.API.Controllers;
 public class DispositivosController : ControllerBase
 {
     private readonly DispositivoService _service;
+    private const int MaxPageSize = 100;
 
     public DispositivosController(DispositivoService service)
     {
@@ -17,14 +21,31 @@ public class DispositivosController : ControllerBase
     }
 
     /// <summary>
-    /// Retorna todos os dispositivos IoT cadastrados.
+    /// Retorna dispositivos IoT com paginação.
     /// </summary>
     [HttpGet]
-    public IActionResult Get() => Ok(_service.ObterTodos());
+    public async Task<IActionResult> Get([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10, CancellationToken ct = default)
+    {
+        if (pageNumber <= 0 || pageSize <= 0)
+            return BadRequest("pageNumber e pageSize devem ser maiores que 0.");
 
-    /// <summary>
-    /// Retorna um dispositivo por ID.
-    /// </summary>
+        if (pageSize > MaxPageSize)
+            pageSize = MaxPageSize;
+
+        var result = await _service.ObterPaginadoAsync(pageNumber, pageSize, ct);
+
+        // Adiciona os metadados no header
+        Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(new
+        {
+            result.TotalItems,
+            result.PageNumber,
+            result.PageSize,
+            result.TotalPages
+        }));
+
+        return Ok(result.Items);
+    }
+
     [HttpGet("{id}")]
     public IActionResult GetById(Guid id)
     {
@@ -32,9 +53,6 @@ public class DispositivosController : ControllerBase
         return disp is null ? NotFound() : Ok(disp);
     }
 
-    /// <summary>
-    /// Cria um novo dispositivo.
-    /// </summary>
     [HttpPost]
     public IActionResult Post([FromBody] DispositivoIoT dispositivo)
     {
@@ -43,9 +61,6 @@ public class DispositivosController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = novo.DispositivoIotId }, novo);
     }
 
-    /// <summary>
-    /// Atualiza um dispositivo existente.
-    /// </summary>
     [HttpPut("{id}")]
     public IActionResult Put(Guid id, [FromBody] DispositivoIoT dispositivo)
     {
@@ -54,9 +69,6 @@ public class DispositivosController : ControllerBase
         return atualizado ? Ok(dispositivo) : NotFound();
     }
 
-    /// <summary>
-    /// Remove um dispositivo pelo ID.
-    /// </summary>
     [HttpDelete("{id}")]
     public IActionResult Delete(Guid id)
     {

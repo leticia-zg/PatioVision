@@ -28,4 +28,8 @@ public class Moto
     public Guid DispositivoIotId { get; set; } // Relacionamento com o IoT da moto
 
     public DispositivoIoT? Dispositivo { get; set; }
+
+    // Campos de auditoria
+    public DateTime DtCadastro { get; set; }
+    public DateTime? DtAtualizacao { get; set; }
 }

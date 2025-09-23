@@ -29,4 +29,11 @@ public class Patio
     public DispositivoIoT? Dispositivo { get; set; }
 
     public ICollection<Moto> Motos { get; set; } = new List<Moto>();
+
+    // Campos de auditoria
+    // DtCadastro: data de criação (UTC). Sempre setado no service ao criar.
+    public DateTime DtCadastro { get; set; }
+
+    // DtAtualizacao: ultima atualização (UTC). Atualizado no Update.
+    public DateTime? DtAtualizacao { get; set; }
 }

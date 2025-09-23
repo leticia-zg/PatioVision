@@ -16,4 +16,8 @@ public class DispositivoIoT
     public string UltimaLocalizacao { get; set; } // Dados de localização que foram coletados
 
     public DateTime UltimaAtualizacao { get; set; } = DateTime.UtcNow;
+
+    // Campos de auditoria
+    public DateTime DtCadastro { get; set; }
+    public DateTime? DtAtualizacao { get; set; }
 }

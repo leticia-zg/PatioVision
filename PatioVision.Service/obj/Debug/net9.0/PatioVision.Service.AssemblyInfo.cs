@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PatioVision.Service")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+93a6f45605b7237be97b3299e6b36d6b82930c95")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b2a411c4479533c7004b2e8d0f5f022c4e75a383")]
 [assembly: System.Reflection.AssemblyProductAttribute("PatioVision.Service")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PatioVision.Service")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
