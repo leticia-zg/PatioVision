@@ -1,12 +1,7 @@
+using Microsoft.EntityFrameworkCore;
 using PatioVision.Core.Models;
 using PatioVision.Data.Context;
 using PatioVision.Service.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 
 namespace PatioVision.Service.Services
 {
@@ -14,13 +9,10 @@ namespace PatioVision.Service.Services
     {
         private readonly AppDbContext _context;
 
-        public DispositivoService(AppDbContext context)
-        {
-            _context = context;
-        }
+        public DispositivoService(AppDbContext context) => _context = context;
 
-        // --- Paginado ---
-        public async Task<PagedResult<DispositivoIoT>> ObterPaginadoAsync(
+        // --- Pagination ---
+        public async Task<PagedResult<DispositivoIoT>> GetPagedAsync(
             int pageNumber = 1,
             int pageSize = 10,
             string? search = null,
@@ -40,73 +32,63 @@ namespace PatioVision.Service.Services
 
             switch (sort?.ToLowerInvariant())
             {
-                case "tipo":
-                    query = query.OrderBy(d => d.Tipo);
-                    break;
-                case "-tipo":
-                    query = query.OrderByDescending(d => d.Tipo);
-                    break;
-                case "ultimaatualizacao":
-                case "ultimataualizacao":
-                    query = query.OrderBy(d => d.UltimaAtualizacao);
-                    break;
+                case "tipo": query = query.OrderBy(d => d.Tipo); break;
+                case "-tipo": query = query.OrderByDescending(d => d.Tipo); break;
+                case "ultimaatualizacao": query = query.OrderBy(d => d.UltimaAtualizacao); break;
                 case "-ultimaatualizacao":
-                default:
-                    query = query.OrderByDescending(d => d.UltimaAtualizacao);
-                    break;
+                default: query = query.OrderByDescending(d => d.UltimaAtualizacao); break;
             }
 
             var total = await query.CountAsync(ct);
-            var items = await query
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync(ct);
+            var items = await query.Skip((pageNumber - 1) * pageSize)
+                                   .Take(pageSize)
+                                   .ToListAsync(ct);
 
             return new PagedResult<DispositivoIoT>(items, total, pageNumber, pageSize);
         }
 
-        // métodos existentes (síncronos), com auditoria
-        public IEnumerable<DispositivoIoT> ObterTodos()
-        {
-            return _context.Dispositivos.ToList();
-        }
+        // --- CRUD ---
+        public DispositivoIoT? GetById(Guid id)
+            => _context.Dispositivos
+                       .AsNoTracking()
+                       .FirstOrDefault(d => d.DispositivoIotId == id);
 
-        public DispositivoIoT? ObterPorId(Guid id)
+        public DispositivoIoT Create(DispositivoIoT device)
         {
-            return _context.Dispositivos.FirstOrDefault(d => d.DispositivoIotId == id);
-        }
+            if (device is null) throw new ArgumentNullException(nameof(device));
 
-        public DispositivoIoT Criar(DispositivoIoT dispositivo)
-        {
-            dispositivo.DtCadastro = DateTime.UtcNow;
-            dispositivo.DtAtualizacao = DateTime.UtcNow;
+            device.DtCadastro = DateTime.UtcNow;
+            device.DtAtualizacao = DateTime.UtcNow;
+            if (device.UltimaAtualizacao == default)
+                device.UltimaAtualizacao = DateTime.UtcNow;
 
-            _context.Dispositivos.Add(dispositivo);
+            _context.Dispositivos.Add(device);
             _context.SaveChanges();
-            return dispositivo;
+            return device;
         }
 
-        public bool Atualizar(Guid id, DispositivoIoT atualizado)
+        public bool Update(Guid id, DispositivoIoT updated)
         {
-            var dispositivo = ObterPorId(id);
-            if (dispositivo == null) return false;
+            if (updated is null || id == Guid.Empty || updated.DispositivoIotId != id)
+                throw new ArgumentException("Dados inválidos para atualização.");
 
-            dispositivo.Tipo = atualizado.Tipo;
-            dispositivo.UltimaLocalizacao = atualizado.UltimaLocalizacao;
-            dispositivo.UltimaAtualizacao = DateTime.UtcNow;
-            dispositivo.DtAtualizacao = DateTime.UtcNow;
+            var exists = _context.Dispositivos.AsNoTracking().Any(d => d.DispositivoIotId == id);
+            if (!exists) return false;
 
-            _context.Dispositivos.Update(dispositivo);
+            updated.DtAtualizacao = DateTime.UtcNow;
+            updated.UltimaAtualizacao = DateTime.UtcNow;
+
+            _context.Entry(updated).State = EntityState.Modified;
             _context.SaveChanges();
             return true;
         }
 
-        public bool Remover(Guid id)
+        public bool Delete(Guid id)
         {
-            var dispositivo = ObterPorId(id);
-            if (dispositivo == null) return false;
+            var entity = _context.Dispositivos.Find(id);
+            if (entity is null) return false;
 
-            _context.Dispositivos.Remove(dispositivo);
+            _context.Dispositivos.Remove(entity);
             _context.SaveChanges();
             return true;
         }
