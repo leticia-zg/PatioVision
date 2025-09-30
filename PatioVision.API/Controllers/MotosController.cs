@@ -1,16 +1,43 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using PatioVision.Core.Models;
 using PatioVision.Service.Services;
 
 namespace PatioVision.API.Controllers;
 
+/// <summary>
+/// Endpoints para gerenciamento de motos (listagem paginada, consulta por id, criação, atualização e remoção).
+/// </summary>
+/// <remarks>
+/// Convenções:
+/// - Rotas base: <c>/api/motos</c>
+/// - HATEOAS retornado em <c>_links</c>
+/// - Paginação com cabeçalhos <c>X-Total-Count</c> e <c>Link</c>
+/// </remarks>
 [ApiController]
 [Route("api/motos")]
+[Produces("application/json")]
 public class MotosController : ControllerBase
 {
     private readonly MotoService _service;
     public MotosController(MotoService service) => _service = service;
 
+    /// <summary>
+    /// Lista motos com paginação, filtro e ordenação.
+    /// </summary>
+    /// <remarks>
+    /// Exemplos:
+    /// - <c>GET /api/motos?pageNumber=1&amp;pageSize=10</c><br/>
+    /// - <c>GET /api/motos?search=placa:ABC1D23</c><br/>
+    /// - <c>GET /api/motos?sort=modelo,-ano</c> (ordena por <c>modelo</c> asc e <c>ano</c> desc)<br/><br/>
+    /// Regras: <c>pageNumber &gt;= 1</c>, <c>1 &lt;= pageSize &lt;= 100</c>.
+    /// </remarks>
+    /// <param name="pageNumber">Número da página (padrão: 1).</param>
+    /// <param name="pageSize">Tamanho da página, entre 1 e 100 (padrão: 10).</param>
+    /// <param name="search">Filtro simples (ex.: <c>placa:ABC</c>, <c>modelo:CG</c>).</param>
+    /// <param name="sort">Campos para ordenação (ex.: <c>modelo,-ano</c>). Padrão: <c>modelo</c>.</param>
+    /// <response code="200">Lista paginada retornada com sucesso.</response>
+    /// <response code="400">Parâmetros de paginação inválidos.</response>
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -50,6 +77,12 @@ public class MotosController : ControllerBase
         return Ok(body);
     }
 
+    /// <summary>
+    /// Obtém detalhes de uma moto pelo identificador.
+    /// </summary>
+    /// <param name="id">Identificador da moto.</param>
+    /// <response code="200">Recurso encontrado.</response>
+    /// <response code="404">Moto não encontrada.</response>
     [HttpGet("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -72,6 +105,22 @@ public class MotosController : ControllerBase
         return Ok(body);
     }
 
+    /// <summary>
+    /// Cria uma nova moto.
+    /// </summary>
+    /// <remarks>
+    /// **Exemplo de payload**:
+    /// ```json
+    /// {
+    ///   "modelo": "CG 160",
+    ///   "placa": "ABC1D23",
+    ///   "ano": 2023
+    /// }
+    /// ```
+    /// </remarks>
+    /// <param name="moto">Dados da moto a ser criada.</param>
+    /// <response code="201">Moto criada com sucesso.</response>
+    /// <response code="400">Dados inválidos.</response>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -97,6 +146,14 @@ public class MotosController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = created.MotoId }, body);
     }
 
+    /// <summary>
+    /// Atualiza completamente uma moto existente.
+    /// </summary>
+    /// <param name="id">Identificador da moto.</param>
+    /// <param name="moto">Dados atualizados da moto.</param>
+    /// <response code="204">Atualizada com sucesso.</response>
+    /// <response code="400">Dados inválidos.</response>
+    /// <response code="404">Moto não encontrada.</response>
     [HttpPut("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -109,6 +166,13 @@ public class MotosController : ControllerBase
         return NoContent();
     }
 
+    /// <summary>
+    /// Remove uma moto.
+    /// </summary>
+    /// <param name="id">Identificador da moto.</param>
+    /// <response code="204">Excluída com sucesso.</response>
+    /// <response code="400">ID inválido.</response>
+    /// <response code="404">Moto não encontrada.</response>
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

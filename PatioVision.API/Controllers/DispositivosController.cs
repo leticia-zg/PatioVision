@@ -1,16 +1,37 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using PatioVision.Core.Models;
 using PatioVision.Service.Services;
 
 namespace PatioVision.API.Controllers;
 
+/// <summary>
+/// Endpoints para gerenciamento de dispositivos IoT.
+/// </summary>
+/// <remarks>
+/// Rotas base: <c>/api/dispositivos</c>. Suporta paginação, HATEOAS e ordenação (padrão: <c>-ultimaatualizacao</c>).
+/// </remarks>
 [ApiController]
 [Route("api/dispositivos")]
+[Produces("application/json")]
 public class DispositivosController : ControllerBase
 {
     private readonly DispositivoService _service;
     public DispositivosController(DispositivoService service) => _service = service;
 
+    /// <summary>
+    /// Lista dispositivos com paginação, filtro e ordenação.
+    /// </summary>
+    /// <remarks>
+    /// Ex.: <c>GET /api/dispositivos?pageNumber=1&amp;pageSize=10&amp;search=tipo:CAMERA&amp;sort=-ultimaatualizacao</c><br/>
+    /// Regras: <c>pageNumber &gt;= 1</c>, <c>1 &lt;= pageSize &lt;= 100</c>. Padrão de sort: <c>-ultimaatualizacao</c>.
+    /// </remarks>
+    /// <param name="pageNumber">Número da página (padrão: 1).</param>
+    /// <param name="pageSize">Tamanho da página, entre 1 e 100 (padrão: 10).</param>
+    /// <param name="search">Filtro simples (ex.: <c>tipo:CAMERA</c>, <c>status:ATIVO</c>).</param>
+    /// <param name="sort">Ordenação (ex.: <c>tipo,-createdAt</c>). Padrão: <c>-ultimaatualizacao</c>.</param>
+    /// <response code="200">Lista paginada retornada.</response>
+    /// <response code="400">Parâmetros de paginação inválidos.</response>
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -51,6 +72,12 @@ public class DispositivosController : ControllerBase
         return Ok(body);
     }
 
+    /// <summary>
+    /// Obtém um dispositivo pelo identificador.
+    /// </summary>
+    /// <param name="id">Identificador do dispositivo.</param>
+    /// <response code="200">Recurso encontrado.</response>
+    /// <response code="404">Dispositivo não encontrado.</response>
     [HttpGet("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -73,6 +100,23 @@ public class DispositivosController : ControllerBase
         return Ok(body);
     }
 
+    /// <summary>
+    /// Cria um novo dispositivo IoT.
+    /// </summary>
+    /// <remarks>
+    /// **Exemplo**:
+    /// ```json
+    /// {
+    ///   "patioId": "00000000-0000-0000-0000-000000000001",
+    ///   "tipo": "CAMERA",
+    ///   "serialNumber": "CAM-001-XYZ",
+    ///   "status": "ATIVO"
+    /// }
+    /// ```
+    /// </remarks>
+    /// <param name="disp">Dados do dispositivo.</param>
+    /// <response code="201">Criado com sucesso.</response>
+    /// <response code="400">Dados inválidos.</response>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -97,6 +141,14 @@ public class DispositivosController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = created.DispositivoIotId }, body);
     }
 
+    /// <summary>
+    /// Atualiza completamente um dispositivo existente.
+    /// </summary>
+    /// <param name="id">Identificador do dispositivo.</param>
+    /// <param name="disp">Dados atualizados do dispositivo.</param>
+    /// <response code="204">Atualizado com sucesso.</response>
+    /// <response code="400">Dados inválidos.</response>
+    /// <response code="404">Dispositivo não encontrado.</response>
     [HttpPut("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -109,6 +161,13 @@ public class DispositivosController : ControllerBase
         return NoContent();
     }
 
+    /// <summary>
+    /// Remove um dispositivo.
+    /// </summary>
+    /// <param name="id">Identificador do dispositivo.</param>
+    /// <response code="204">Excluído com sucesso.</response>
+    /// <response code="400">ID inválido.</response>
+    /// <response code="404">Dispositivo não encontrado.</response>
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

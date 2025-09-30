@@ -1,16 +1,37 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using PatioVision.Core.Models;
 using PatioVision.Service.Services;
 
 namespace PatioVision.API.Controllers;
 
+/// <summary>
+/// Endpoints para gerenciamento de pátios.
+/// </summary>
+/// <remarks>
+/// Rotas base: <c>/api/patios</c>. Suporta paginação, HATEOAS e cabeçalhos de navegação.
+/// </remarks>
 [ApiController]
 [Route("api/patios")]
+[Produces("application/json")]
 public class PatioController : ControllerBase
 {
     private readonly PatioService _service;
     public PatioController(PatioService service) => _service = service;
 
+    /// <summary>
+    /// Lista pátios com paginação, filtro e ordenação.
+    /// </summary>
+    /// <remarks>
+    /// Ex.: <c>GET /api/patios?pageNumber=1&amp;pageSize=10&amp;search=nome:Centro&amp;sort=-dtcadastro</c><br/>
+    /// Regras: <c>pageNumber &gt;= 1</c>, <c>1 &lt;= pageSize &lt;= 100</c>. Padrão de sort: <c>-dtcadastro</c>.
+    /// </remarks>
+    /// <param name="pageNumber">Número da página (padrão: 1).</param>
+    /// <param name="pageSize">Tamanho da página, entre 1 e 100 (padrão: 10).</param>
+    /// <param name="search">Filtro simples (ex.: <c>nome:Centro</c>).</param>
+    /// <param name="sort">Ordenação (ex.: <c>nome,-cidade</c>). Padrão: <c>-dtcadastro</c>.</param>
+    /// <response code="200">Lista paginada retornada.</response>
+    /// <response code="400">Parâmetros de paginação inválidos.</response>
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -50,6 +71,12 @@ public class PatioController : ControllerBase
         return Ok(body);
     }
 
+    /// <summary>
+    /// Obtém um pátio pelo identificador.
+    /// </summary>
+    /// <param name="id">Identificador do pátio.</param>
+    /// <response code="200">Recurso encontrado.</response>
+    /// <response code="404">Pátio não encontrado.</response>
     [HttpGet("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -72,6 +99,18 @@ public class PatioController : ControllerBase
         return Ok(body);
     }
 
+    /// <summary>
+    /// Cria um novo pátio.
+    /// </summary>
+    /// <remarks>
+    /// **Exemplo**:
+    /// ```json
+    /// { "nome": "Pátio Centro", "cidade": "São Paulo", "capacidade": 300 }
+    /// ```
+    /// </remarks>
+    /// <param name="patio">Dados do pátio.</param>
+    /// <response code="201">Criado com sucesso.</response>
+    /// <response code="400">Dados inválidos.</response>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -97,6 +136,14 @@ public class PatioController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = created.PatioId }, body);
     }
 
+    /// <summary>
+    /// Atualiza completamente um pátio existente.
+    /// </summary>
+    /// <param name="id">Identificador do pátio.</param>
+    /// <param name="patio">Dados atualizados do pátio.</param>
+    /// <response code="204">Atualizado com sucesso.</response>
+    /// <response code="400">Dados inválidos.</response>
+    /// <response code="404">Pátio não encontrado.</response>
     [HttpPut("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -109,6 +156,13 @@ public class PatioController : ControllerBase
         return NoContent();
     }
 
+    /// <summary>
+    /// Remove um pátio.
+    /// </summary>
+    /// <param name="id">Identificador do pátio.</param>
+    /// <response code="204">Excluído com sucesso.</response>
+    /// <response code="400">ID inválido.</response>
+    /// <response code="404">Pátio não encontrado.</response>
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
