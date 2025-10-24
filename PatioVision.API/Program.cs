@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +39,16 @@ builder.Services.AddSwaggerGen(c =>
     c.IncludeXmlComments(xmlPath);
 });
 
+builder.Services.AddHealthChecks()
+    .AddCheck("API", () =>
+        HealthCheckResult.Healthy("API funcionando normalmente"),
+        tags: new[] { "api", "live" })
+    .AddOracle(
+        connectionString: builder.Configuration.GetConnectionString("OracleConnection"),
+        name: "Banco de Dados Oracle",
+        tags: new[] { "db", "oracle", "ready" });
+
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -44,6 +56,18 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.MapHealthChecks("/health");
+
+app.MapHealthChecks("/health/live", new HealthCheckOptions
+{
+    Predicate = check => check.Tags.Contains("live")
+});
+
+app.MapHealthChecks("/health/ready", new HealthCheckOptions
+{
+    Predicate = check => check.Tags.Contains("ready")
+});
 
 app.UseAuthorization();
 app.MapControllers();

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PatioVision.Core")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+93a6f45605b7237be97b3299e6b36d6b82930c95")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+216477ad9d1a4d8f7f3a430bd4ec3da4f4fba5eb")]
 [assembly: System.Reflection.AssemblyProductAttribute("PatioVision.Core")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PatioVision.Core")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -8,23 +8,23 @@
     "net9.0": []
   },
   "packageFolders": {
-    "C:\\Users\\Evandro\\.nuget\\packages\\": {},
+    "C:\\Users\\Letícia\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Evandro\\OneDrive\\Área de Trabalho\\PatioVision\\PatioVision.Core\\PatioVision.Core.csproj",
+      "projectUniqueName": "C:\\Users\\Letícia\\OneDrive\\Desktop\\PatioVision\\PatioVision.Core\\PatioVision.Core.csproj",
       "projectName": "PatioVision.Core",
-      "projectPath": "C:\\Users\\Evandro\\OneDrive\\Área de Trabalho\\PatioVision\\PatioVision.Core\\PatioVision.Core.csproj",
-      "packagesPath": "C:\\Users\\Evandro\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Evandro\\OneDrive\\Área de Trabalho\\PatioVision\\PatioVision.Core\\obj\\",
+      "projectPath": "C:\\Users\\Letícia\\OneDrive\\Desktop\\PatioVision\\PatioVision.Core\\PatioVision.Core.csproj",
+      "packagesPath": "C:\\Users\\Letícia\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Letícia\\OneDrive\\Desktop\\PatioVision\\PatioVision.Core\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Evandro\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Letícia\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -51,7 +51,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.200"
+      "SdkAnalysisLevel": "10.0.100"
     },
     "frameworks": {
       "net9.0": {
@@ -67,12 +67,26 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Ref",
+            "version": "[9.0.10, 9.0.10]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[9.0.10, 9.0.10]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Ref",
+            "version": "[9.0.10, 9.0.10]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.100-rc.2.25502.107/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

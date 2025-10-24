@@ -1,8 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "bgDL+OIMWHo=",
+  "dgSpecHash": "EQ9/7LURbkc=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Evandro\\OneDrive\\Área de Trabalho\\PatioVision\\PatioVision.Core\\PatioVision.Core.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\Users\\Letícia\\OneDrive\\Desktop\\PatioVision\\PatioVision.Core\\PatioVision.Core.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Letícia\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\9.0.10\\microsoft.windowsdesktop.app.ref.9.0.10.nupkg.sha512",
+    "C:\\Users\\Letícia\\.nuget\\packages\\microsoft.netcore.app.ref\\9.0.10\\microsoft.netcore.app.ref.9.0.10.nupkg.sha512",
+    "C:\\Users\\Letícia\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\9.0.10\\microsoft.aspnetcore.app.ref.9.0.10.nupkg.sha512"
+  ],
   "logs": []
 }
