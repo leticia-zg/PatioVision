@@ -6,6 +6,11 @@ using Microsoft.OpenApi.Models;
 using System.Reflection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using HealthChecks.Oracle;
+using HealthChecks.UI.Client;
+using Asp.Versioning;
+using Asp.Versioning.ApiExplorer;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +30,22 @@ builder.Services
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
     });
 builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddApiVersioning(options =>
+{
+    options.DefaultApiVersion = new ApiVersion(1, 0);
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.ReportApiVersions = true;
+    options.ApiVersionReader = new UrlSegmentApiVersionReader(); 
+})
+.AddMvc()
+.AddApiExplorer(options =>
+{
+    options.GroupNameFormat = "'v'VVV";
+    options.SubstituteApiVersionInUrl = true;
+});
+
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
@@ -40,13 +61,14 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddHealthChecks()
-    .AddCheck("API", () =>
-        HealthCheckResult.Healthy("API funcionando normalmente"),
-        tags: new[] { "api", "live" })
     .AddOracle(
         connectionString: builder.Configuration.GetConnectionString("OracleConnection"),
-        name: "Banco de Dados Oracle",
-        tags: new[] { "db", "oracle", "ready" });
+        name: "Banco de dados Oracle",
+        tags: new[] { "db", "oracle", "ready" })
+    .AddCheck("API", () =>
+        HealthCheckResult.Healthy("API funcionando normalmente"),  
+        tags: new[] { "api", "live" });
+    
 
 
 var app = builder.Build();
@@ -57,16 +79,28 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.MapHealthChecks("/health");
+app.MapHealthChecks("/health", new HealthCheckOptions
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
+    ResultStatusCodes =
+    {
+        [HealthStatus.Healthy] = StatusCodes.Status200OK,
+        [HealthStatus.Degraded] = StatusCodes.Status200OK,
+        [HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable
+    }
+});
 
 app.MapHealthChecks("/health/live", new HealthCheckOptions
 {
-    Predicate = check => check.Tags.Contains("live")
-});
+    Predicate = check => check.Tags.Contains("live"),
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+}); 
+
 
 app.MapHealthChecks("/health/ready", new HealthCheckOptions
 {
-    Predicate = check => check.Tags.Contains("ready")
+    Predicate = check => check.Tags.Contains("ready"),
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
 
 app.UseAuthorization();
