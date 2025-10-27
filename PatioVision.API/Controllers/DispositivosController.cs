@@ -1,5 +1,7 @@
-using Microsoft.AspNetCore.Mvc;
+using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using PatioVision.Core.Models;
 using PatioVision.Service.Services;
 
@@ -12,8 +14,11 @@ namespace PatioVision.API.Controllers;
 /// Rotas base: <c>/api/dispositivos</c>. Suporta paginação, HATEOAS e ordenação (padrão: <c>-ultimaatualizacao</c>).
 /// </remarks>
 [ApiController]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
 [Route("api/dispositivos")]
 [Produces("application/json")]
+[Authorize]
 public class DispositivosController : ControllerBase
 {
     private readonly DispositivoService _service;

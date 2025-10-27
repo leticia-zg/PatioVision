@@ -1,5 +1,7 @@
-using Microsoft.AspNetCore.Mvc;
+using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using PatioVision.Core.Models;
 using PatioVision.Service.Services;
 
@@ -15,8 +17,11 @@ namespace PatioVision.API.Controllers;
 /// - Paginação com cabeçalhos <c>X-Total-Count</c> e <c>Link</c>
 /// </remarks>
 [ApiController]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
 [Route("api/motos")]
 [Produces("application/json")]
+[Authorize]
 public class MotosController : ControllerBase
 {
     private readonly MotoService _service;

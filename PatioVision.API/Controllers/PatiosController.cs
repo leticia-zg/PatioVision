@@ -1,5 +1,7 @@
-using Microsoft.AspNetCore.Mvc;
+using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using PatioVision.Core.Models;
 using PatioVision.Service.Services;
 
@@ -12,8 +14,11 @@ namespace PatioVision.API.Controllers;
 /// Rotas base: <c>/api/patios</c>. Suporta paginação, HATEOAS e cabeçalhos de navegação.
 /// </remarks>
 [ApiController]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
 [Route("api/patios")]
 [Produces("application/json")]
+[Authorize]
 public class PatioController : ControllerBase
 {
     private readonly PatioService _service;
