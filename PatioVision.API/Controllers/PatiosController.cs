@@ -8,15 +8,14 @@ using PatioVision.Service.Services;
 namespace PatioVision.API.Controllers;
 
 /// <summary>
-/// Endpoints para gerenciamento de p·tios.
+/// Endpoints para gerenciamento de p√°tios.
 /// </summary>
 /// <remarks>
-/// Rotas base: <c>/api/patios</c>. Suporta paginaÁ„o, HATEOAS e cabeÁalhos de navegaÁ„o.
+/// Rotas base: <c>/api/patios</c>. Suporta pagina√ß√£o, HATEOAS e cabe√ßalhos de navega√ß√£o.
 /// </remarks>
 [ApiController]
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/[controller]")]
-[Route("api/patios")]
 [Produces("application/json")]
 [Authorize]
 public class PatioController : ControllerBase
@@ -25,18 +24,18 @@ public class PatioController : ControllerBase
     public PatioController(PatioService service) => _service = service;
 
     /// <summary>
-    /// Lista p·tios com paginaÁ„o, filtro e ordenaÁ„o.
+    /// Lista p√°tios com pagina√ß√£o, filtro e ordena√ß√£o.
     /// </summary>
     /// <remarks>
     /// Ex.: <c>GET /api/patios?pageNumber=1&amp;pageSize=10&amp;search=nome:Centro&amp;sort=-dtcadastro</c><br/>
-    /// Regras: <c>pageNumber &gt;= 1</c>, <c>1 &lt;= pageSize &lt;= 100</c>. Padr„o de sort: <c>-dtcadastro</c>.
+    /// Regras: <c>pageNumber &gt;= 1</c>, <c>1 &lt;= pageSize &lt;= 100</c>. Padr√£o de sort: <c>-dtcadastro</c>.
     /// </remarks>
-    /// <param name="pageNumber">N˙mero da p·gina (padr„o: 1).</param>
-    /// <param name="pageSize">Tamanho da p·gina, entre 1 e 100 (padr„o: 10).</param>
+    /// <param name="pageNumber">N√∫mero da p√°gina (padr√£o: 1).</param>
+    /// <param name="pageSize">Tamanho da p√°gina, entre 1 e 100 (padr√£o: 10).</param>
     /// <param name="search">Filtro simples (ex.: <c>nome:Centro</c>).</param>
-    /// <param name="sort">OrdenaÁ„o (ex.: <c>nome,-cidade</c>). Padr„o: <c>-dtcadastro</c>.</param>
+    /// <param name="sort">Ordena√ß√£o (ex.: <c>nome,-cidade</c>). Padr√£o: <c>-dtcadastro</c>.</param>
     /// <response code="200">Lista paginada retornada.</response>
-    /// <response code="400">Par‚metros de paginaÁ„o inv·lidos.</response>
+    /// <response code="400">Par√¢metros de pagina√ß√£o inv√°lidos.</response>
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -77,11 +76,11 @@ public class PatioController : ControllerBase
     }
 
     /// <summary>
-    /// ObtÈm um p·tio pelo identificador.
+    /// Obt√©m um p√°tio pelo identificador.
     /// </summary>
-    /// <param name="id">Identificador do p·tio.</param>
+    /// <param name="id">Identificador do p√°tio.</param>
     /// <response code="200">Recurso encontrado.</response>
-    /// <response code="404">P·tio n„o encontrado.</response>
+    /// <response code="404">P√°tio n√£o encontrado.</response>
     [HttpGet("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -105,24 +104,24 @@ public class PatioController : ControllerBase
     }
 
     /// <summary>
-    /// Cria um novo p·tio.
+    /// Cria um novo p√°tio.
     /// </summary>
     /// <remarks>
     /// **Exemplo**:
     /// ```json
-    /// { "nome": "P·tio Centro", "cidade": "S„o Paulo", "capacidade": 300 }
+    /// { "nome": "P√°tio Centro", "cidade": "S√£o Paulo", "capacidade": 300 }
     /// ```
     /// </remarks>
-    /// <param name="patio">Dados do p·tio.</param>
+    /// <param name="patio">Dados do p√°tio.</param>
     /// <response code="201">Criado com sucesso.</response>
-    /// <response code="400">Dados inv·lidos.</response>
+    /// <response code="400">Dados inv√°lidos.</response>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult Post([FromBody] Patio patio)
     {
         if (patio is null || string.IsNullOrWhiteSpace(patio.Nome))
-            return BadRequest("Dados inv·lidos.");
+            return BadRequest("Dados inv√°lidos.");
 
         var created = _service.Create(patio);
 
@@ -142,39 +141,39 @@ public class PatioController : ControllerBase
     }
 
     /// <summary>
-    /// Atualiza completamente um p·tio existente.
+    /// Atualiza completamente um p√°tio existente.
     /// </summary>
-    /// <param name="id">Identificador do p·tio.</param>
-    /// <param name="patio">Dados atualizados do p·tio.</param>
+    /// <param name="id">Identificador do p√°tio.</param>
+    /// <param name="patio">Dados atualizados do p√°tio.</param>
     /// <response code="204">Atualizado com sucesso.</response>
-    /// <response code="400">Dados inv·lidos.</response>
-    /// <response code="404">P·tio n„o encontrado.</response>
+    /// <response code="400">Dados inv√°lidos.</response>
+    /// <response code="404">P√°tio n√£o encontrado.</response>
     [HttpPut("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult Put(Guid id, [FromBody] Patio patio)
     {
-        if (patio is null || patio.PatioId != id) return BadRequest("Dados inv·lidos.");
+        if (patio is null || patio.PatioId != id) return BadRequest("Dados inv√°lidos.");
         var ok = _service.Update(id, patio);
         if (!ok) return NotFound();
         return NoContent();
     }
 
     /// <summary>
-    /// Remove um p·tio.
+    /// Remove um p√°tio.
     /// </summary>
-    /// <param name="id">Identificador do p·tio.</param>
-    /// <response code="204">ExcluÌdo com sucesso.</response>
-    /// <response code="400">ID inv·lido.</response>
-    /// <response code="404">P·tio n„o encontrado.</response>
+    /// <param name="id">Identificador do p√°tio.</param>
+    /// <response code="204">Exclu√≠do com sucesso.</response>
+    /// <response code="400">ID inv√°lido.</response>
+    /// <response code="404">P√°tio n√£o encontrado.</response>
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult Delete(Guid id)
     {
-        if (id == Guid.Empty) return BadRequest("ID inv·lido.");
+        if (id == Guid.Empty) return BadRequest("ID inv√°lido.");
         var ok = _service.Delete(id);
         if (!ok) return NotFound();
         return NoContent();

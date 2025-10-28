@@ -12,8 +12,8 @@ using PatioVision.Data.Context;
 namespace PatioVision.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250518193819_EnumComoTexto")]
-    partial class EnumComoTexto
+    [Migration("20251028003911_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,6 +31,12 @@ namespace PatioVision.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("RAW(16)");
 
+                    b.Property<DateTime?>("DtAtualizacao")
+                        .HasColumnType("TIMESTAMP(7)");
+
+                    b.Property<DateTime>("DtCadastro")
+                        .HasColumnType("TIMESTAMP(7)");
+
                     b.Property<string>("Tipo")
                         .IsRequired()
                         .HasColumnType("NVARCHAR2(2000)");
@@ -39,7 +45,6 @@ namespace PatioVision.Data.Migrations
                         .HasColumnType("TIMESTAMP(7)");
 
                     b.Property<string>("UltimaLocalizacao")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("NVARCHAR2(255)");
 
@@ -56,6 +61,12 @@ namespace PatioVision.Data.Migrations
 
                     b.Property<Guid>("DispositivoIotId")
                         .HasColumnType("RAW(16)");
+
+                    b.Property<DateTime?>("DtAtualizacao")
+                        .HasColumnType("TIMESTAMP(7)");
+
+                    b.Property<DateTime>("DtCadastro")
+                        .HasColumnType("TIMESTAMP(7)");
 
                     b.Property<string>("Modelo")
                         .IsRequired()
@@ -95,11 +106,19 @@ namespace PatioVision.Data.Migrations
                     b.Property<Guid>("DispositivoIotId")
                         .HasColumnType("RAW(16)");
 
+                    b.Property<DateTime?>("DtAtualizacao")
+                        .HasColumnType("TIMESTAMP(7)");
+
+                    b.Property<DateTime>("DtCadastro")
+                        .HasColumnType("TIMESTAMP(7)");
+
                     b.Property<decimal>("Latitude")
-                        .HasColumnType("DECIMAL(18, 2)");
+                        .HasPrecision(18, 10)
+                        .HasColumnType("DECIMAL(18,10)");
 
                     b.Property<decimal>("Longitude")
-                        .HasColumnType("DECIMAL(18, 2)");
+                        .HasPrecision(18, 10)
+                        .HasColumnType("DECIMAL(18,10)");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -111,6 +130,41 @@ namespace PatioVision.Data.Migrations
                     b.HasIndex("DispositivoIotId");
 
                     b.ToTable("PATIO", (string)null);
+                });
+
+            modelBuilder.Entity("PatioVision.Core.Models.Usuario", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("RAW(16)");
+
+                    b.Property<int>("Ativo")
+                        .HasColumnType("NUMBER(1)");
+
+                    b.Property<DateTime>("DtAlteracao")
+                        .HasColumnType("TIMESTAMP(7)");
+
+                    b.Property<DateTime>("DtCriacao")
+                        .HasColumnType("TIMESTAMP(7)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR2(2000)");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR2(2000)");
+
+                    b.Property<Guid>("Perfil")
+                        .HasColumnType("RAW(16)");
+
+                    b.Property<string>("Senha")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR2(2000)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("USUARIO", (string)null);
                 });
 
             modelBuilder.Entity("PatioVision.Core.Models.Moto", b =>

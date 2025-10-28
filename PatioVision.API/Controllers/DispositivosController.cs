@@ -11,12 +11,11 @@ namespace PatioVision.API.Controllers;
 /// Endpoints para gerenciamento de dispositivos IoT.
 /// </summary>
 /// <remarks>
-/// Rotas base: <c>/api/dispositivos</c>. Suporta paginaÁ„o, HATEOAS e ordenaÁ„o (padr„o: <c>-ultimaatualizacao</c>).
+/// Rotas base: <c>/api/dispositivos</c>. Suporta pagina√ß√£o, HATEOAS e ordena√ß√£o (padr√£o: <c>-ultimaatualizacao</c>).
 /// </remarks>
 [ApiController]
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/[controller]")]
-[Route("api/dispositivos")]
 [Produces("application/json")]
 [Authorize]
 public class DispositivosController : ControllerBase
@@ -25,18 +24,18 @@ public class DispositivosController : ControllerBase
     public DispositivosController(DispositivoService service) => _service = service;
 
     /// <summary>
-    /// Lista dispositivos com paginaÁ„o, filtro e ordenaÁ„o.
+    /// Lista dispositivos com pagina√ß√£o, filtro e ordena√ß√£o.
     /// </summary>
     /// <remarks>
     /// Ex.: <c>GET /api/dispositivos?pageNumber=1&amp;pageSize=10&amp;search=tipo:CAMERA&amp;sort=-ultimaatualizacao</c><br/>
-    /// Regras: <c>pageNumber &gt;= 1</c>, <c>1 &lt;= pageSize &lt;= 100</c>. Padr„o de sort: <c>-ultimaatualizacao</c>.
+    /// Regras: <c>pageNumber &gt;= 1</c>, <c>1 &lt;= pageSize &lt;= 100</c>. Padr√£o de sort: <c>-ultimaatualizacao</c>.
     /// </remarks>
-    /// <param name="pageNumber">N˙mero da p·gina (padr„o: 1).</param>
-    /// <param name="pageSize">Tamanho da p·gina, entre 1 e 100 (padr„o: 10).</param>
+    /// <param name="pageNumber">N√∫mero da p√°gina (padr√£o: 1).</param>
+    /// <param name="pageSize">Tamanho da p√°gina, entre 1 e 100 (padr√£o: 10).</param>
     /// <param name="search">Filtro simples (ex.: <c>tipo:CAMERA</c>, <c>status:ATIVO</c>).</param>
-    /// <param name="sort">OrdenaÁ„o (ex.: <c>tipo,-createdAt</c>). Padr„o: <c>-ultimaatualizacao</c>.</param>
+    /// <param name="sort">Orden√ß√£o (ex.: <c>tipo,-createdAt</c>). Padr√£o: <c>-ultimaatualizacao</c>.</param>
     /// <response code="200">Lista paginada retornada.</response>
-    /// <response code="400">Par‚metros de paginaÁ„o inv·lidos.</response>
+    /// <response code="400">Par√¢metros de pagina√ß√£o inv√°lidos.</response>
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -78,11 +77,11 @@ public class DispositivosController : ControllerBase
     }
 
     /// <summary>
-    /// ObtÈm um dispositivo pelo identificador.
+    /// Obt√©m um dispositivo pelo identificador.
     /// </summary>
     /// <param name="id">Identificador do dispositivo.</param>
     /// <response code="200">Recurso encontrado.</response>
-    /// <response code="404">Dispositivo n„o encontrado.</response>
+    /// <response code="404">Dispositivo n√£o encontrado.</response>
     [HttpGet("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -121,13 +120,13 @@ public class DispositivosController : ControllerBase
     /// </remarks>
     /// <param name="disp">Dados do dispositivo.</param>
     /// <response code="201">Criado com sucesso.</response>
-    /// <response code="400">Dados inv·lidos.</response>
+    /// <response code="400">Dados inv√°lidos.</response>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult Post([FromBody] DispositivoIoT disp)
     {
-        if (disp is null) return BadRequest("Dados inv·lidos.");
+        if (disp is null) return BadRequest("Dados inv√°lidos.");
 
         var created = _service.Create(disp);
 
@@ -152,15 +151,15 @@ public class DispositivosController : ControllerBase
     /// <param name="id">Identificador do dispositivo.</param>
     /// <param name="disp">Dados atualizados do dispositivo.</param>
     /// <response code="204">Atualizado com sucesso.</response>
-    /// <response code="400">Dados inv·lidos.</response>
-    /// <response code="404">Dispositivo n„o encontrado.</response>
+    /// <response code="400">Dados inv√°lidos.</response>
+    /// <response code="404">Dispositivo n√£o encontrado.</response>
     [HttpPut("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult Put(Guid id, [FromBody] DispositivoIoT disp)
     {
-        if (disp is null || disp.DispositivoIotId != id) return BadRequest("Dados inv·lidos.");
+        if (disp is null || disp.DispositivoIotId != id) return BadRequest("Dados inv√°lidos.");
         var ok = _service.Update(id, disp);
         if (!ok) return NotFound();
         return NoContent();
@@ -170,16 +169,16 @@ public class DispositivosController : ControllerBase
     /// Remove um dispositivo.
     /// </summary>
     /// <param name="id">Identificador do dispositivo.</param>
-    /// <response code="204">ExcluÌdo com sucesso.</response>
-    /// <response code="400">ID inv·lido.</response>
-    /// <response code="404">Dispositivo n„o encontrado.</response>
+    /// <response code="204">Exclu√≠do com sucesso.</response>
+    /// <response code="400">ID inv√°lido.</response>
+    /// <response code="404">Dispositivo n√£o encontrado.</response>
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult Delete(Guid id)
     {
-        if (id == Guid.Empty) return BadRequest("ID inv·lido.");
+        if (id == Guid.Empty) return BadRequest("ID inv√°lido.");
         var ok = _service.Delete(id);
         if (!ok) return NotFound();
         return NoContent();

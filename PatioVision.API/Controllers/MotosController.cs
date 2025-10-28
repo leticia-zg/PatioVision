@@ -8,18 +8,17 @@ using PatioVision.Service.Services;
 namespace PatioVision.API.Controllers;
 
 /// <summary>
-/// Endpoints para gerenciamento de motos (listagem paginada, consulta por id, criaÁ„o, atualizaÁ„o e remoÁ„o).
+/// Endpoints para gerenciamento de motos (listagem paginada, consulta por id, cria√ß√£o, atualiza√ß√£o e remo√ß√£o).
 /// </summary>
 /// <remarks>
-/// ConvenÁıes:
+/// Conven√ß√µes:
 /// - Rotas base: <c>/api/motos</c>
 /// - HATEOAS retornado em <c>_links</c>
-/// - PaginaÁ„o com cabeÁalhos <c>X-Total-Count</c> e <c>Link</c>
+/// - Pagina√ß√£o com cabe√ßalhos <c>X-Total-Count</c> e <c>Link</c>
 /// </remarks>
 [ApiController]
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/[controller]")]
-[Route("api/motos")]
 [Produces("application/json")]
 [Authorize]
 public class MotosController : ControllerBase
@@ -28,7 +27,7 @@ public class MotosController : ControllerBase
     public MotosController(MotoService service) => _service = service;
 
     /// <summary>
-    /// Lista motos com paginaÁ„o, filtro e ordenaÁ„o.
+    /// Lista motos com pagina√ß√£o, filtro e ordena√ß√£o.
     /// </summary>
     /// <remarks>
     /// Exemplos:
@@ -37,12 +36,12 @@ public class MotosController : ControllerBase
     /// - <c>GET /api/motos?sort=modelo,-ano</c> (ordena por <c>modelo</c> asc e <c>ano</c> desc)<br/><br/>
     /// Regras: <c>pageNumber &gt;= 1</c>, <c>1 &lt;= pageSize &lt;= 100</c>.
     /// </remarks>
-    /// <param name="pageNumber">N˙mero da p·gina (padr„o: 1).</param>
-    /// <param name="pageSize">Tamanho da p·gina, entre 1 e 100 (padr„o: 10).</param>
+    /// <param name="pageNumber">N√∫mero da p√°gina (padr√£o: 1).</param>
+    /// <param name="pageSize">Tamanho da p√°gina, entre 1 e 100 (padr√£o: 10).</param>
     /// <param name="search">Filtro simples (ex.: <c>placa:ABC</c>, <c>modelo:CG</c>).</param>
-    /// <param name="sort">Campos para ordenaÁ„o (ex.: <c>modelo,-ano</c>). Padr„o: <c>modelo</c>.</param>
+    /// <param name="sort">Campos para ordena√ß√£o (ex.: <c>modelo,-ano</c>). Padr√£o: <c>modelo</c>.</param>
     /// <response code="200">Lista paginada retornada com sucesso.</response>
-    /// <response code="400">Par‚metros de paginaÁ„o inv·lidos.</response>
+    /// <response code="400">Par√¢metros de pagina√ß√£o inv√°lidos.</response>
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -83,11 +82,11 @@ public class MotosController : ControllerBase
     }
 
     /// <summary>
-    /// ObtÈm detalhes de uma moto pelo identificador.
+    /// Obt√©m detalhes de uma moto pelo identificador.
     /// </summary>
     /// <param name="id">Identificador da moto.</param>
     /// <response code="200">Recurso encontrado.</response>
-    /// <response code="404">Moto n„o encontrada.</response>
+    /// <response code="404">Moto n√£o encontrada.</response>
     [HttpGet("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -125,14 +124,14 @@ public class MotosController : ControllerBase
     /// </remarks>
     /// <param name="moto">Dados da moto a ser criada.</param>
     /// <response code="201">Moto criada com sucesso.</response>
-    /// <response code="400">Dados inv·lidos.</response>
+    /// <response code="400">Dados inv√°lidos.</response>
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult Post([FromBody] Moto moto)
     {
         if (moto is null || string.IsNullOrWhiteSpace(moto.Modelo) || string.IsNullOrWhiteSpace(moto.Placa))
-            return BadRequest("Dados inv·lidos.");
+            return BadRequest("Dados inv√°lidos.");
 
         var created = _service.Create(moto);
 
@@ -157,15 +156,15 @@ public class MotosController : ControllerBase
     /// <param name="id">Identificador da moto.</param>
     /// <param name="moto">Dados atualizados da moto.</param>
     /// <response code="204">Atualizada com sucesso.</response>
-    /// <response code="400">Dados inv·lidos.</response>
-    /// <response code="404">Moto n„o encontrada.</response>
+    /// <response code="400">Dados inv√°lidos.</response>
+    /// <response code="404">Moto n√£o encontrada.</response>
     [HttpPut("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult Put(Guid id, [FromBody] Moto moto)
     {
-        if (moto is null || moto.MotoId != id) return BadRequest("Dados inv·lidos.");
+        if (moto is null || moto.MotoId != id) return BadRequest("Dados inv√°lidos.");
         var ok = _service.Update(id, moto);
         if (!ok) return NotFound();
         return NoContent();
@@ -175,16 +174,16 @@ public class MotosController : ControllerBase
     /// Remove uma moto.
     /// </summary>
     /// <param name="id">Identificador da moto.</param>
-    /// <response code="204">ExcluÌda com sucesso.</response>
-    /// <response code="400">ID inv·lido.</response>
-    /// <response code="404">Moto n„o encontrada.</response>
+    /// <response code="204">Exclu√≠da com sucesso.</response>
+    /// <response code="400">ID inv√°lido.</response>
+    /// <response code="404">Moto n√£o encontrada.</response>
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult Delete(Guid id)
     {
-        if (id == Guid.Empty) return BadRequest("ID inv·lido.");
+        if (id == Guid.Empty) return BadRequest("ID inv√°lido.");
         var ok = _service.Delete(id);
         if (!ok) return NotFound();
         return NoContent();

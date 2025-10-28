@@ -23,6 +23,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<MotoService>();
 builder.Services.AddScoped<PatioService>();
 builder.Services.AddScoped<DispositivoService>();
+builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<UsuarioService>();
+
 
 
 builder.Services
@@ -55,7 +58,7 @@ builder.Services.AddSwaggerGen(c =>
     {
         Title = "Patio Vision API",
         Version = "v1",
-        Description = "API para mapeamento inteligente de motos da Mottu. Desenvolvido por LetÌcia Zago, Ana Carolina Santana e Celina Alc‚ntara.",
+        Description = "API para mapeamento inteligente de motos da Mottu. Desenvolvido por Let√≠cia Zago, Ana Carolina Santana e Celina Alc√¢ntara.",
     });
 
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";

@@ -42,7 +42,6 @@ namespace PatioVision.Data.Migrations
                         .HasColumnType("TIMESTAMP(7)");
 
                     b.Property<string>("UltimaLocalizacao")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("NVARCHAR2(255)");
 
@@ -111,10 +110,12 @@ namespace PatioVision.Data.Migrations
                         .HasColumnType("TIMESTAMP(7)");
 
                     b.Property<decimal>("Latitude")
-                        .HasColumnType("DECIMAL(18, 2)");
+                        .HasPrecision(18, 10)
+                        .HasColumnType("DECIMAL(18,10)");
 
                     b.Property<decimal>("Longitude")
-                        .HasColumnType("DECIMAL(18, 2)");
+                        .HasPrecision(18, 10)
+                        .HasColumnType("DECIMAL(18,10)");
 
                     b.Property<string>("Nome")
                         .IsRequired()
@@ -126,6 +127,41 @@ namespace PatioVision.Data.Migrations
                     b.HasIndex("DispositivoIotId");
 
                     b.ToTable("PATIO", (string)null);
+                });
+
+            modelBuilder.Entity("PatioVision.Core.Models.Usuario", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("RAW(16)");
+
+                    b.Property<int>("Ativo")
+                        .HasColumnType("NUMBER(1)");
+
+                    b.Property<DateTime>("DtAlteracao")
+                        .HasColumnType("TIMESTAMP(7)");
+
+                    b.Property<DateTime>("DtCriacao")
+                        .HasColumnType("TIMESTAMP(7)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR2(2000)");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR2(2000)");
+
+                    b.Property<Guid>("Perfil")
+                        .HasColumnType("RAW(16)");
+
+                    b.Property<string>("Senha")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR2(2000)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("USUARIO", (string)null);
                 });
 
             modelBuilder.Entity("PatioVision.Core.Models.Moto", b =>
