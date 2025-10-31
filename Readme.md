@@ -62,6 +62,18 @@ O sistema permite que operadores da Mottu visualizem, atualizem e rastreiem moto
 | POST   | `/api/dispositivos`           | Cadastra um novo dispositivo IoT           | 201 Created / 400 Bad Request |
 | DELETE | `/api/dispositivos/{id}`      | Remove um dispositivo IoT                  | 204 No Content / 404          |
 
+### 🤖 ML - Redistribuição de Motos
+
+| Método | Rota                                  | Descrição                                  | Status HTTP Esperado         |
+|--------|---------------------------------------|--------------------------------------------|-------------------------------|
+| POST   | `/api/v1/redistribuicao/recomendar`  | Gera recomendações de redistribuição usando ML.NET | 200 OK / 400 / 500 |
+
+### 🌱 Seeder de Dados
+
+| Método | Rota                          | Descrição                                  | Status HTTP Esperado         |
+|--------|-------------------------------|--------------------------------------------|-------------------------------|
+| POST   | `/api/v1/seeder/ml-training-data` | Popula banco com dados de treinamento ML | 200 OK / 500                  |
+
 ---
 
 ## 📋 Pré-requisitos
@@ -106,9 +118,9 @@ http://localhost:{porta}/swagger
 
 ---
 
-## ✅ Exemplo de Fluxo
+## ✅ Exemplo de Fluxo Básico
 
-Cadastre um IOT de Pátio:
+### 1. Cadastre um IOT de Pátio
 
 ```http
 POST /api/dispositivos
@@ -121,7 +133,7 @@ Content-Type: application/json
 }
 ```
 
-Cadastre um Pátio:
+### 2. Cadastre um Pátio
 
 ```http
 POST /api/patios
@@ -135,7 +147,7 @@ Content-Type: application/json
 }
 ```
 
-Cadastre um IOT de Moto:
+### 3. Cadastre um IOT de Moto
 
 ```http
 POST /api/dispositivos
@@ -147,7 +159,7 @@ Content-Type: application/json
 }
 ```
 
-Cadastre uma Moto:
+### 4. Cadastre uma Moto
 
 ```http
 POST /api/motos
@@ -160,4 +172,151 @@ Content-Type: application/json
   "dispositivoIotId": "COLE_O_ID_RETORNADO_DO_DISPOSITIVO_DA_MOTO"
 }
 ```
+
+---
+
+## 🤖 Tutorial: Usando Redistribuição ML
+
+Este tutorial mostra como usar os recursos de Machine Learning para obter recomendações de redistribuição de motos entre pátios.
+
+### Passo 1: Popular Dados de Treinamento
+
+Antes de usar o endpoint de redistribuição, é necessário popular o banco de dados com dados de treinamento. O seeder cria:
+
+- **270 dispositivos IoT** (150 para motos + 120 para pátios)
+- **100 pátios** com diferentes categorias e localizações geográficas
+- **140 motos** distribuídas de forma desequilibrada entre os pátios
+- **100 usuários** com perfis variados
+
+**Executar o seeder:**
+
+```http
+POST /api/v1/seeder/ml-training-data
+Authorization: Bearer {seu_token_jwt}
+Content-Type: application/json
+```
+
+**Resposta de sucesso:**
+
+```json
+{
+  "message": "Seeder executado com sucesso. Dados de treinamento ML foram populados no banco de dados.",
+  "timestamp": "2025-01-28T10:30:00Z"
+}
+```
+
+**⚠️ Importante:**
+- O seeder verifica se já existem dados no banco. Se houver dados, o seed será pulado automaticamente.
+- Execute este endpoint apenas uma vez, ou quando desejar resetar os dados de treinamento.
+- Este processo pode levar alguns segundos devido à quantidade de dados criados.
+
+### Passo 2: Obter Recomendações de Redistribuição
+
+Após popular os dados, você pode usar o endpoint de redistribuição para obter recomendações baseadas em ML.NET.
+
+**Recomendação para todas as motos disponíveis:**
+
+```http
+POST /api/v1/redistribuicao/recomendar
+Authorization: Bearer {seu_token_jwt}
+Content-Type: application/json
+
+{}
+```
+
+**Recomendação para motos específicas:**
+
+```http
+POST /api/v1/redistribuicao/recomendar
+Authorization: Bearer {seu_token_jwt}
+Content-Type: application/json
+
+{
+  "motoIds": [
+    "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "4fa85f64-5717-4562-b3fc-2c963f66afa7"
+  ]
+}
+```
+
+**Recomendação considerando apenas pátios específicos:**
+
+```http
+POST /api/v1/redistribuicao/recomendar
+Authorization: Bearer {seu_token_jwt}
+Content-Type: application/json
+
+{
+  "motoIds": ["3fa85f64-5717-4562-b3fc-2c963f66afa6"],
+  "patioIds": [
+    "5fa85f64-5717-4562-b3fc-2c963f66afa8",
+    "6fa85f64-5717-4562-b3fc-2c963f66afa9"
+  ]
+}
+```
+
+### Passo 3: Entender a Resposta
+
+A resposta do endpoint inclui:
+
+1. **Recomendações**: Lista ordenada por score (melhores primeiro)
+2. **Métricas**: Análise da distribuição atual vs proposta
+
+**Exemplo de resposta:**
+
+```json
+{
+  "recomendacoes": [
+    {
+      "motoId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "motoModelo": "CG 160",
+      "motoPlaca": "ABC1D23",
+      "patioOrigemId": "7fa85f64-5717-4562-b3fc-2c963f66afa1",
+      "patioOrigemNome": "Pátio Centro 1",
+      "score": 0.95,
+      "patioDestinoId": "8fa85f64-5717-4562-b3fc-2c963f66afa2",
+      "patioDestinoNome": "Pátio Norte 5",
+      "motivos": [
+        "Pátio origem está congestionado (25 motos)",
+        "Pátio destino tem capacidade disponível (8 motos)",
+        "Melhora significativa no equilíbrio de distribuição"
+      ],
+      "impactoEquilibrio": 0.75
+    }
+  ],
+  "metricas": {
+    "totalMotos": 140,
+    "totalPatios": 100,
+    "mediaMotosPorPatio": 1.4,
+    "desvioPadraoAtual": 2.8,
+    "desvioPadraoEstimado": 1.2,
+    "melhoriaEquilibrioPercentual": 57.14,
+    "patiosCongestionados": 15,
+    "patiosSubutilizados": 35
+  },
+  "totalRecomendacoes": 50
+}
+```
+
+### Interpretando os Resultados
+
+- **Score**: Valor de 0 a 1, onde 1 é a melhor recomendação. Priorize recomendações com score > 0.7
+- **ImpactoEquilibrio**: Quanto maior, melhor a melhoria no equilíbrio de distribuição
+- **Motivos**: Explicações em texto sobre por que a redistribuição é recomendada
+- **Métricas**:
+  - `desvioPadraoAtual`: Quanto maior, mais desequilibrada está a distribuição atual
+  - `desvioPadraoEstimado`: Distribuição esperada após aplicar as recomendações
+  - `melhoriaEquilibrioPercentual`: Percentual de melhoria esperado no equilíbrio
+
+### Como Funciona o Modelo ML
+
+O modelo ML.NET utiliza um algoritmo **FastTree** (regressão) que aprende padrões de distribuição baseados em:
+
+1. **Equilíbrio entre pátios**: Distribuição uniforme do número de motos
+2. **Distância geográfica**: Calculada usando fórmula de Haversine
+3. **Categoria do pátio**: Compatibilidade com o status da moto
+4. **Taxa de ocupação**: Relação entre ocupação atual e média geral
+5. **Congestionamento**: Identificação de pátios acima da capacidade média
+
+O modelo é treinado automaticamente na primeira chamada ao endpoint, usando os dados do banco como base.
 

@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Letícia\\OneDrive\\Desktop\\PatioVision\\PatioVision.Core\\PatioVision.Core.csproj": {}
+    "C:\\Users\\Novais\\Documents\\CODE\\PatioVision\\PatioVision.Core\\PatioVision.Core.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Letícia\\OneDrive\\Desktop\\PatioVision\\PatioVision.Core\\PatioVision.Core.csproj": {
+    "C:\\Users\\Novais\\Documents\\CODE\\PatioVision\\PatioVision.Core\\PatioVision.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Letícia\\OneDrive\\Desktop\\PatioVision\\PatioVision.Core\\PatioVision.Core.csproj",
+        "projectUniqueName": "C:\\Users\\Novais\\Documents\\CODE\\PatioVision\\PatioVision.Core\\PatioVision.Core.csproj",
         "projectName": "PatioVision.Core",
-        "projectPath": "C:\\Users\\Letícia\\OneDrive\\Desktop\\PatioVision\\PatioVision.Core\\PatioVision.Core.csproj",
-        "packagesPath": "C:\\Users\\Letícia\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Letícia\\OneDrive\\Desktop\\PatioVision\\PatioVision.Core\\obj\\",
+        "projectPath": "C:\\Users\\Novais\\Documents\\CODE\\PatioVision\\PatioVision.Core\\PatioVision.Core.csproj",
+        "packagesPath": "C:\\Users\\Novais\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Novais\\Documents\\CODE\\PatioVision\\PatioVision.Core\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Letícia\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Novais\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,6 +26,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -53,6 +54,14 @@
             "Microsoft.EntityFrameworkCore.Relational": {
               "target": "Package",
               "version": "[9.0.5, )"
+            },
+            "Microsoft.ML": {
+              "target": "Package",
+              "version": "[3.0.1, )"
+            },
+            "Microsoft.ML.FastTree": {
+              "target": "Package",
+              "version": "[3.0.1, )"
             }
           },
           "imports": [
@@ -69,15 +78,15 @@
           "downloadDependencies": [
             {
               "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[9.0.10, 9.0.10]"
+              "version": "[9.0.9, 9.0.9]"
             },
             {
               "name": "Microsoft.NETCore.App.Ref",
-              "version": "[9.0.10, 9.0.10]"
+              "version": "[9.0.9, 9.0.9]"
             },
             {
               "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[9.0.10, 9.0.10]"
+              "version": "[9.0.9, 9.0.9]"
             }
           ],
           "frameworkReferences": {
@@ -85,7 +94,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.100-rc.2.25502.107/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.100-rc.1.25451.107/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

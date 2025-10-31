@@ -25,6 +25,9 @@ builder.Services.AddScoped<PatioService>();
 builder.Services.AddScoped<DispositivoService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<UsuarioService>();
+builder.Services.AddScoped<PatioVision.Service.Services.ML.RedistribuicaoMLService>();
+builder.Services.AddScoped<PatioVision.Service.Services.RedistribuicaoService>();
+builder.Services.AddScoped<PatioVision.Data.Seeders.MlTrainingDataSeeder>();
 
 
 
