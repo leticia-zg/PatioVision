@@ -27,6 +27,22 @@ public class RedistribuicaoInput
 
     public float TaxaOcupacaoDestino { get; set; }
 
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+    public float CapacidadePatioAtual { get; set; }
+
+    public float CapacidadePatioDestino { get; set; }
+
+    public float PercentualOcupacaoAtual { get; set; } // quantidadeMotos / capacidade (0-1)
+
+    public float PercentualOcupacaoDestino { get; set; }
+
+    public float EspacoDisponivelDestino { get; set; } // capacidade - quantidade atual
+
+=======
+>>>>>>> 05260f4b7ce0b7a95a5bd6fcd7688de7b9872a12
+>>>>>>> Stashed changes
     public float DiferencaEquilibrio { get; set; } // Diferença entre ocupação atual e ideal
 
     public float MediaGeralMotosPorPatio { get; set; }
