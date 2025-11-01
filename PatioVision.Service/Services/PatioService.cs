@@ -59,10 +59,7 @@ namespace PatioVision.Service.Services
         {
             if (patio is null) throw new ArgumentNullException(nameof(patio));
             if (string.IsNullOrWhiteSpace(patio.Nome))
-                throw new ArgumentException("Nome ï¿½ obrigatï¿½rio.");
-
-            if (patio.Capacidade < 1 || patio.Capacidade > 1000)
-                throw new ArgumentException("A capacidade deve estar entre 1 e 1000 motos.");
+                throw new ArgumentException("Nome é obrigatório.");
 
             patio.DtCadastro = DateTime.UtcNow;
             patio.DtAtualizacao = DateTime.UtcNow;
@@ -75,13 +72,13 @@ namespace PatioVision.Service.Services
         public bool Update(Guid id, Patio updated)
         {
             if (updated is null || id == Guid.Empty || updated.PatioId != id)
-                throw new ArgumentException("Dados invï¿½lidos para atualizaï¿½ï¿½o.");
+                throw new ArgumentException("Dados inválidos para atualização.");
 
             var exists = _context.Patios.AsNoTracking().Any(p => p.PatioId == id);
             if (!exists) return false;
 
             if (string.IsNullOrWhiteSpace(updated.Nome))
-                throw new ArgumentException("Nome ï¿½ obrigatï¿½rio.");
+                throw new ArgumentException("Nome é obrigatório.");
 
             updated.DtAtualizacao = DateTime.UtcNow;
 
