@@ -138,28 +138,6 @@ public class MlTrainingDataSeeder
             var latOffset = (decimal)(_random.NextDouble() * 0.2 - 0.1); // ±0.1 graus (~11km)
             var lngOffset = (decimal)(_random.NextDouble() * 0.2 - 0.1);
 
-<<<<<<< Updated upstream
-=======
-<<<<<<< HEAD
-            // Definir capacidade baseada na categoria do pátio
-            int capacidade;
-            switch (categoria)
-            {
-                case CategoriaPatio.Aluguel:
-                    capacidade = _random.Next(15, 31); // 15-30 motos
-                    break;
-                case CategoriaPatio.Manutencao:
-                    capacidade = _random.Next(5, 16); // 5-15 motos
-                    break;
-                case CategoriaPatio.SemPlaca:
-                default:
-                    capacidade = _random.Next(10, 26); // 10-25 motos
-                    break;
-            }
-
-=======
->>>>>>> 05260f4b7ce0b7a95a5bd6fcd7688de7b9872a12
->>>>>>> Stashed changes
             var patio = new Patio
             {
                 PatioId = Guid.NewGuid(),
@@ -167,13 +145,6 @@ public class MlTrainingDataSeeder
                 Categoria = categoria,
                 Latitude = centroLat + latOffset,
                 Longitude = centroLng + lngOffset,
-<<<<<<< Updated upstream
-=======
-<<<<<<< HEAD
-                Capacidade = capacidade,
-=======
->>>>>>> 05260f4b7ce0b7a95a5bd6fcd7688de7b9872a12
->>>>>>> Stashed changes
                 DispositivoIotId = dispositivo.DispositivoIotId,
                 DtCadastro = baseDate.AddDays(_random.Next(0, 365)),
                 DtAtualizacao = _random.Next(0, 100) > 40 ? baseDate.AddDays(_random.Next(0, 365)) : null
