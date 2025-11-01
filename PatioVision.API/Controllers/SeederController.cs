@@ -9,26 +9,11 @@ namespace PatioVision.API.Controllers;
 /// <summary>
 /// Endpoints para execução de seeders de dados
 /// </summary>
-<<<<<<< Updated upstream
-=======
-<<<<<<< HEAD
-
-=======
->>>>>>> 05260f4b7ce0b7a95a5bd6fcd7688de7b9872a12
->>>>>>> Stashed changes
 [ApiController]
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/seeder")]
 [Produces("application/json")]
-<<<<<<< Updated upstream
 [Authorize]
-=======
-<<<<<<< HEAD
-[AllowAnonymous]
-=======
-[Authorize]
->>>>>>> 05260f4b7ce0b7a95a5bd6fcd7688de7b9872a12
->>>>>>> Stashed changes
 public class SeederController : ControllerBase
 {
     private readonly MlTrainingDataSeeder _seeder;
