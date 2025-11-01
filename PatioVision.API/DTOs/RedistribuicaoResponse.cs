@@ -21,17 +21,6 @@ public class RedistribuicaoResponse
     /// Total de recomendações geradas
     /// </summary>
     public int TotalRecomendacoes { get; set; }
-<<<<<<< Updated upstream
-=======
-<<<<<<< HEAD
-
-    /// <summary>
-    /// Mensagem informativa sobre o resultado (ex: quando não há recomendações)
-    /// </summary>
-    public string? Mensagem { get; set; }
-=======
->>>>>>> 05260f4b7ce0b7a95a5bd6fcd7688de7b9872a12
->>>>>>> Stashed changes
 }
 
 /// <summary>
@@ -93,17 +82,6 @@ public class RecomendacaoDetalhada
     /// Recomendação descritiva da ação a ser tomada
     /// </summary>
     public string Recomendacao { get; set; } = string.Empty;
-<<<<<<< Updated upstream
-=======
-<<<<<<< HEAD
-
-    /// <summary>
-    /// Mensagem informativa quando não há recomendações para esta moto específica
-    /// </summary>
-    public string? Mensagem { get; set; }
-=======
->>>>>>> 05260f4b7ce0b7a95a5bd6fcd7688de7b9872a12
->>>>>>> Stashed changes
 }
 
 /// <summary>
