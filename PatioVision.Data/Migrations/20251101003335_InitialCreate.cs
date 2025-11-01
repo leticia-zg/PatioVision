@@ -11,51 +11,6 @@ namespace PatioVision.Data.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            // Limpar tabelas existentes se houver
-            migrationBuilder.Sql(@"
-BEGIN
-    EXECUTE IMMEDIATE 'DROP TABLE MOTO CASCADE CONSTRAINTS';
-EXCEPTION
-    WHEN OTHERS THEN
-        IF SQLCODE != -942 THEN
-            RAISE;
-        END IF;
-END;
-");
-
-            migrationBuilder.Sql(@"
-BEGIN
-    EXECUTE IMMEDIATE 'DROP TABLE USUARIO CASCADE CONSTRAINTS';
-EXCEPTION
-    WHEN OTHERS THEN
-        IF SQLCODE != -942 THEN
-            RAISE;
-        END IF;
-END;
-");
-
-            migrationBuilder.Sql(@"
-BEGIN
-    EXECUTE IMMEDIATE 'DROP TABLE PATIO CASCADE CONSTRAINTS';
-EXCEPTION
-    WHEN OTHERS THEN
-        IF SQLCODE != -942 THEN
-            RAISE;
-        END IF;
-END;
-");
-
-            migrationBuilder.Sql(@"
-BEGIN
-    EXECUTE IMMEDIATE 'DROP TABLE DISPOSITIVO_IOT CASCADE CONSTRAINTS';
-EXCEPTION
-    WHEN OTHERS THEN
-        IF SQLCODE != -942 THEN
-            RAISE;
-        END IF;
-END;
-");
-
             migrationBuilder.CreateTable(
                 name: "DISPOSITIVO_IOT",
                 columns: table => new
@@ -99,6 +54,7 @@ END;
                     Categoria = table.Column<string>(type: "NVARCHAR2(2000)", nullable: false),
                     Latitude = table.Column<decimal>(type: "DECIMAL(18,10)", precision: 18, scale: 10, nullable: false),
                     Longitude = table.Column<decimal>(type: "DECIMAL(18,10)", precision: 18, scale: 10, nullable: false),
+                    Capacidade = table.Column<int>(type: "NUMBER(10)", nullable: false),
                     DispositivoIotId = table.Column<Guid>(type: "RAW(16)", nullable: false),
                     DtCadastro = table.Column<DateTime>(type: "TIMESTAMP(7)", nullable: false),
                     DtAtualizacao = table.Column<DateTime>(type: "TIMESTAMP(7)", nullable: true)

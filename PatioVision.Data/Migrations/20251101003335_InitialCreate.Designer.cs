@@ -12,7 +12,7 @@ using PatioVision.Data.Context;
 namespace PatioVision.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251028003911_InitialCreate")]
+    [Migration("20251101003335_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -98,6 +98,9 @@ namespace PatioVision.Data.Migrations
                     b.Property<Guid>("PatioId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("RAW(16)");
+
+                    b.Property<int>("Capacidade")
+                        .HasColumnType("NUMBER(10)");
 
                     b.Property<string>("Categoria")
                         .IsRequired()
