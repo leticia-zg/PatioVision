@@ -2610,23 +2610,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Novais\\.nuget\\packages\\": {},
+    "C:\\Users\\Letícia\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Novais\\Documents\\CODE\\PatioVision\\PatioVision.Service\\PatioVision.Service.csproj",
+      "projectUniqueName": "C:\\Users\\Letícia\\OneDrive\\Desktop\\PatioVision\\PatioVision.Service\\PatioVision.Service.csproj",
       "projectName": "PatioVision.Service",
-      "projectPath": "C:\\Users\\Novais\\Documents\\CODE\\PatioVision\\PatioVision.Service\\PatioVision.Service.csproj",
-      "packagesPath": "C:\\Users\\Novais\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Novais\\Documents\\CODE\\PatioVision\\PatioVision.Service\\obj\\",
+      "projectPath": "C:\\Users\\Letícia\\OneDrive\\Desktop\\PatioVision\\PatioVision.Service\\PatioVision.Service.csproj",
+      "packagesPath": "C:\\Users\\Letícia\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Letícia\\OneDrive\\Desktop\\PatioVision\\PatioVision.Service\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Novais\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Letícia\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -2635,18 +2635,17 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "C:\\Users\\Novais\\Documents\\CODE\\PatioVision\\PatioVision.Core\\PatioVision.Core.csproj": {
-              "projectPath": "C:\\Users\\Novais\\Documents\\CODE\\PatioVision\\PatioVision.Core\\PatioVision.Core.csproj"
+            "C:\\Users\\Letícia\\OneDrive\\Desktop\\PatioVision\\PatioVision.Core\\PatioVision.Core.csproj": {
+              "projectPath": "C:\\Users\\Letícia\\OneDrive\\Desktop\\PatioVision\\PatioVision.Core\\PatioVision.Core.csproj"
             },
-            "C:\\Users\\Novais\\Documents\\CODE\\PatioVision\\PatioVision.Data\\PatioVision.Data.csproj": {
-              "projectPath": "C:\\Users\\Novais\\Documents\\CODE\\PatioVision\\PatioVision.Data\\PatioVision.Data.csproj"
+            "C:\\Users\\Letícia\\OneDrive\\Desktop\\PatioVision\\PatioVision.Data\\PatioVision.Data.csproj": {
+              "projectPath": "C:\\Users\\Letícia\\OneDrive\\Desktop\\PatioVision\\PatioVision.Data\\PatioVision.Data.csproj"
             }
           }
         }
@@ -2702,15 +2701,15 @@
         "downloadDependencies": [
           {
             "name": "Microsoft.AspNetCore.App.Ref",
-            "version": "[9.0.9, 9.0.9]"
+            "version": "[9.0.10, 9.0.10]"
           },
           {
             "name": "Microsoft.NETCore.App.Ref",
-            "version": "[9.0.9, 9.0.9]"
+            "version": "[9.0.10, 9.0.10]"
           },
           {
             "name": "Microsoft.WindowsDesktop.App.Ref",
-            "version": "[9.0.9, 9.0.9]"
+            "version": "[9.0.10, 9.0.10]"
           }
         ],
         "frameworkReferences": {
@@ -2718,7 +2717,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.100-rc.1.25451.107/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.100-rc.2.25502.107/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
