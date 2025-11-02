@@ -96,6 +96,9 @@ namespace PatioVision.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("RAW(16)");
 
+                    b.Property<int>("Capacidade")
+                        .HasColumnType("NUMBER(10)");
+
                     b.Property<string>("Categoria")
                         .IsRequired()
                         .HasColumnType("NVARCHAR2(2000)");

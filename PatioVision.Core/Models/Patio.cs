@@ -15,7 +15,7 @@ public class Patio
     public string Nome { get; set; }
 
     [Required]
-    public CategoriaPatio Categoria { get; set; } // Enum para definir o tipo do pátio
+    public CategoriaPatio Categoria { get; set; } // Enum para definir o tipo do pï¿½tio
 
     [Required]
     public decimal Latitude { get; set; }
@@ -24,16 +24,20 @@ public class Patio
     public decimal Longitude { get; set; }
 
     [Required]
-    public Guid DispositivoIotId { get; set; } // Relacionamento com o IoT do pátio
+    [Range(1, 1000, ErrorMessage = "A capacidade deve estar entre 1 e 1000 motos")]
+    public int Capacidade { get; set; } // Capacidade mÃ¡xima de motos que o pÃ¡tio pode comportar
+
+    [Required]
+    public Guid DispositivoIotId { get; set; } // Relacionamento com o IoT do pï¿½tio
 
     public DispositivoIoT? Dispositivo { get; set; }
 
     public ICollection<Moto> Motos { get; set; } = new List<Moto>();
 
     // Campos de auditoria
-    // DtCadastro: data de criação (UTC). Sempre setado no service ao criar.
+    // DtCadastro: data de criaï¿½ï¿½o (UTC). Sempre setado no service ao criar.
     public DateTime DtCadastro { get; set; }
 
-    // DtAtualizacao: ultima atualização (UTC). Atualizado no Update.
+    // DtAtualizacao: ultima atualizaï¿½ï¿½o (UTC). Atualizado no Update.
     public DateTime? DtAtualizacao { get; set; }
 }
