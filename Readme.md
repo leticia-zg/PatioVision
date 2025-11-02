@@ -9,6 +9,21 @@
 
 ---
 
+## 📑 Índice
+
+- [Sobre o Projeto](#-sobre-o-projeto)
+- [Aplicação Interna](#-aplicação-interna)
+- [Rotas da API](#-rotas-da-api)
+- [Pré-requisitos](#-pré-requisitos)
+- [Como Instalar e Rodar](#-como-instalar-e-rodar-o-projeto)
+- [Autenticação](#-autenticação)
+- [Exemplo de Fluxo Básico](#-exemplo-de-fluxo-básico)
+- [Tutorial: Redistribuição ML](#-tutorial-usando-redistribuição-ml)
+- [Arquitetura e Tecnologias](#-arquitetura-e-tecnologias)
+- [Recursos Implementados](#-recursos-implementados)
+
+---
+
 ## 📌 Sobre o Projeto
 
 O **PatioVision** é uma aplicação que permite o rastreamento e gerenciamento de motocicletas estacionadas em diferentes pátios, por meio de dispositivos IoT.  
@@ -62,6 +77,30 @@ O sistema permite que operadores da Mottu visualizem, atualizem e rastreiem moto
 | POST   | `/api/dispositivos`           | Cadastra um novo dispositivo IoT           | 201 Created / 400 Bad Request |
 | DELETE | `/api/dispositivos/{id}`      | Remove um dispositivo IoT                  | 204 No Content / 404          |
 
+### 👥 Usuários
+
+| Método | Rota                      | Descrição                                  | Status HTTP Esperado         |
+|--------|---------------------------|--------------------------------------------|-------------------------------|
+| GET    | `/api/usuarios`           | Lista todos os usuários                    | 200 OK                        |
+| GET    | `/api/usuarios/{id}`      | Retorna um usuário específico              | 200 OK / 404 Not Found        |
+| POST   | `/api/usuarios`           | Registra um novo usuário                   | 201 Created / 400 Bad Request |
+| PUT    | `/api/usuarios/{id}`      | Atualiza um usuário existente              | 200 OK / 400 / 404            |
+| DELETE | `/api/usuarios/{id}`      | Remove um usuário                          | 204 No Content / 404          |
+
+### 🔐 Autenticação
+
+| Método | Rota                      | Descrição                                  | Status HTTP Esperado         |
+|--------|---------------------------|--------------------------------------------|-------------------------------|
+| POST   | `/api/v1/auth/login`      | Realiza login e retorna token JWT          | 200 OK / 401 Unauthorized    |
+
+### ❤️ Health Checks
+
+| Método | Rota                      | Descrição                                  | Status HTTP Esperado         |
+|--------|---------------------------|--------------------------------------------|-------------------------------|
+| GET    | `/health`                 | Verifica saúde geral da API                | 200 OK / 503 Service Unavailable |
+| GET    | `/health/live`            | Verifica se a API está viva                | 200 OK                        |
+| GET    | `/health/ready`           | Verifica se a API está pronta (Oracle OK)  | 200 OK / 503 Service Unavailable |
+
 ### 🤖 ML - Redistribuição de Motos
 
 | Método | Rota                                  | Descrição                                  | Status HTTP Esperado         |
@@ -78,7 +117,7 @@ O sistema permite que operadores da Mottu visualizem, atualizem e rastreiem moto
 
 ## 📋 Pré-requisitos
 
-- .NET SDK 9.0 ou superior
+- .NET SDK 10.0 ou superior
 - Banco de dados Oracle em funcionamento
 - Ferramenta de acesso ao Oracle (DBeaver, SQL Developer, etc.)
 
@@ -118,12 +157,88 @@ http://localhost:{porta}/swagger
 
 ---
 
+## 🔐 Autenticação
+
+A API utiliza **JWT (JSON Web Tokens)** para autenticação. A maioria dos endpoints requer autenticação via Bearer Token.
+
+### 1. Criar um Usuário (Opcional - permite criação pública)
+
+```http
+POST /api/v1/usuarios
+Content-Type: application/json
+
+{
+  "nome": "João Silva",
+  "email": "joao.silva@mottu.com",
+  "senha": "MinhaSenh@123",
+  "perfil": "Operador",
+  "ativo": true
+}
+```
+
+**Resposta:**
+```json
+{
+  "data": {
+    "id": "uuid-do-usuario",
+    "nome": "João Silva",
+    "email": "joao.silva@mottu.com"
+  },
+  "links": {
+    "self": {"href": "/api/v1/usuarios/uuid-do-usuario", "method": "GET"}
+  }
+}
+```
+
+### 2. Realizar Login
+
+```http
+POST /api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "joao.silva@mottu.com",
+  "senha": "MinhaSenh@123"
+}
+```
+
+**Resposta:**
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "tokenType": "Bearer",
+  "expiresIn": 28800,
+  "usuarioId": "uuid-do-usuario",
+  "nome": "João Silva",
+  "email": "joao.silva@mottu.com",
+  "perfilId": "Operador"
+}
+```
+
+### 3. Usar o Token nas Requisições
+
+Adicione o header em todas as requisições que requerem autenticação:
+
+```http
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+**⚠️ Importante:**
+- O token JWT expira em 480 minutos (8 horas)
+- A maioria dos endpoints requer autenticação via `[Authorize]`
+- Apenas `/auth/login`, `/usuarios` (POST) e `/seeder/*` são públicos
+
+---
+
 ## ✅ Exemplo de Fluxo Básico
+
+**Nota:** Todos os exemplos abaixo assumem que você já obteve um token JWT válido através do endpoint `/api/v1/auth/login`.
 
 ### 1. Cadastre um IOT de Pátio
 
 ```http
-POST /api/dispositivos
+POST /api/v1/dispositivos
+Authorization: Bearer {seu_token_jwt}
 Content-Type: application/json
 
 {
@@ -136,13 +251,16 @@ Content-Type: application/json
 ### 2. Cadastre um Pátio
 
 ```http
-POST /api/patios
+POST /api/v1/patios
+Authorization: Bearer {seu_token_jwt}
 Content-Type: application/json
+
 {
   "nome": "Pátio Zona Leste",
   "categoria": "SemPlaca",
   "latitude": -23.5631,
   "longitude": -46.6544,
+  "capacidade": 50,
   "dispositivoIotId": "COLE_O_ID_RETORNADO_DO_DISPOSITIVO"
 }
 ```
@@ -150,8 +268,10 @@ Content-Type: application/json
 ### 3. Cadastre um IOT de Moto
 
 ```http
-POST /api/dispositivos
+POST /api/v1/dispositivos
+Authorization: Bearer {seu_token_jwt}
 Content-Type: application/json
+
 {
   "tipo": "Moto",
   "ultimaLocalizacao": "Rampa de saída",
@@ -162,8 +282,10 @@ Content-Type: application/json
 ### 4. Cadastre uma Moto
 
 ```http
-POST /api/motos
+POST /api/v1/motos
+Authorization: Bearer {seu_token_jwt}
 Content-Type: application/json
+
 {
   "modelo": "PCX",
   "placa": "FSR-8Y34",
@@ -319,4 +441,94 @@ O modelo ML.NET utiliza um algoritmo **FastTree** (regressão) que aprende padr�
 5. **Congestionamento**: Identificação de pátios acima da capacidade média
 
 O modelo é treinado automaticamente na primeira chamada ao endpoint, usando os dados do banco como base.
+
+---
+
+## 🏗️ Arquitetura e Tecnologias
+
+### Estrutura do Projeto
+
+```
+PatioVision/
+├── PatioVision.API/              # Camada de apresentação (Controllers, DTOs)
+├── PatioVision.Service/          # Camada de serviços e lógica de negócio
+├── PatioVision.Data/             # Camada de acesso a dados (DbContext, Migrations)
+├── PatioVision.Core/             # Modelos, Enums, Entidades
+└── README.md                     # Este arquivo
+```
+
+### Stack Tecnológica
+
+- **Framework:** ASP.NET Core 10.0
+- **ORM:** Entity Framework Core 9.0
+- **Banco de Dados:** Oracle Database
+- **Autenticação:** JWT Bearer Token
+- **ML:** ML.NET 3.0.1 com FastTree Regression
+- **Health Checks:** AspNetCore.HealthChecks.Oracle 9.0
+- **API Versioning:** Asp.Versioning.Mvc 8.1.0
+- **Documentação:** Swagger/OpenAPI 3.0
+
+### Boas Práticas Implementadas
+
+- ✅ **Clean Architecture** com separação de responsabilidades
+- ✅ **Repository Pattern** através de Services
+- ✅ **DTOs** para transferência de dados
+- ✅ **Validação de entrada** com Data Annotations
+- ✅ **Tratamento de erros** centralizado
+- ✅ **Logging** para debug e monitoramento
+- ✅ **Documentação XML** para Swagger
+- ✅ **HATEOAS** em respostas paginadas
+- ✅ **Migrações** para versionamento de schema
+- ✅ **AsNoTracking()** para performance em consultas read-only
+
+---
+
+## 📊 Recursos Implementados
+
+### Segurança e Autenticação
+- ✅ JWT Bearer Authentication
+- ✅ Hashing de senhas com BCrypt
+- ✅ Autorização baseada em atributos
+- ✅ Tokens com expiração configurável
+
+### Monitoramento
+- ✅ Health Checks com múltiplas verificações
+- ✅ Status de disponibilidade e prontidão separados
+- ✅ Verificação de conectividade Oracle
+
+### Versionamento
+- ✅ Versionamento por URL segment (v1, v2, etc.)
+- ✅ Configuração de versão padrão
+- ✅ Report de versões suportadas nos headers
+
+### Machine Learning
+- ✅ Treinamento automático de modelos
+- ✅ Previsões em tempo real
+- ✅ Métricas de qualidade do modelo
+- ✅ Dados sintéticos para treinamento
+
+---
+
+## 🚀 Como Contribuir
+
+1. Fork o repositório
+2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
+3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a branch (`git push origin feature/AmazingFeature`)
+5. Abra um Pull Request
+
+---
+
+## 📄 Licença
+
+Este projeto é de uso exclusivo interno da **Mottu** e não está disponível para distribuição pública.
+
+---
+
+## 👥 Equipe de Desenvolvimento
+
+Desenvolvido com 💚 por:
+- **Letícia Zago de Souza** - [LinkedIn](https://www.linkedin.com/in/letícia-zago-de-souza)
+- **Ana Carolina Reis Santana** - [LinkedIn](https://www.linkedin.com/in/ana-carolina-santana-9a0a78232)
+- **Celina Alcântara do Carmo** - [LinkedIn](https://www.linkedin.com/in/celinaalcantara)
 
