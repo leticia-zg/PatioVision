@@ -139,20 +139,25 @@ public class RedistribuicaoMLService
 
         var motos = await query.AsNoTracking().ToListAsync();
 
-        // Buscar todos os pátios ou apenas os especificados
+        // Buscar todos os pátios ou apenas os especificados como DESTINO
         var patiosQuery = _context.Patios.AsQueryable();
 
         if (patioIds != null && patioIds.Any())
         {
+            Console.WriteLine($"[RedistribuicaoMLService] Filtrando pátios por IDs: {string.Join(", ", patioIds)}");
             patiosQuery = patiosQuery.Where(p => patioIds.Contains(p.PatioId));
         }
 
         var patios = await patiosQuery.AsNoTracking().ToListAsync();
+        Console.WriteLine($"[RedistribuicaoMLService] Total de pátios selecionados: {patios.Count}");
 
         // Buscar contagem de motos por pátio separadamente para evitar ciclo
-        var patioIdsList = patios.Select(p => p.PatioId).ToList();
+        // IMPORTANTE: Buscar dados de TODOS os pátios onde as motos estão, não apenas os selecionados
+        var patioIdsDasMotos = motos.Select(m => m.PatioId).Distinct().ToList();
+        var patioIdsParaMetricas = patios.Select(p => p.PatioId).Concat(patioIdsDasMotos).Distinct().ToList();
+        
         var quantidadeMotosPorPatio = await _context.Motos
-            .Where(m => patioIdsList.Contains(m.PatioId) && m.Status == StatusMoto.Disponivel)
+            .Where(m => patioIdsParaMetricas.Contains(m.PatioId) && m.Status == StatusMoto.Disponivel)
             .GroupBy(m => m.PatioId)
             .Select(g => new { PatioId = g.Key, Quantidade = g.Count() })
             .ToDictionaryAsync(x => x.PatioId, x => x.Quantidade);
@@ -161,6 +166,15 @@ public class RedistribuicaoMLService
         {
             return new List<RedistribuicaoOutput>();
         }
+
+        // Buscar TODOS os pátios de onde as motos podem estar para evitar queries no loop
+        var todosPatiosBuscados = await _context.Patios
+            .Where(p => patioIdsDasMotos.Contains(p.PatioId))
+            .AsNoTracking()
+            .ToListAsync();
+        
+        // Criar dicionário para lookup rápido
+        var dicTodosPatios = todosPatiosBuscados.ToDictionary(p => p.PatioId, p => p);
 
         // Calcular métricas globais usando o dicionário
         var totalMotos = quantidadeMotosPorPatio.Values.Sum();
@@ -171,25 +185,46 @@ public class RedistribuicaoMLService
         // Para cada moto disponível, avaliar todos os pátios possíveis
         foreach (var moto in motos)
         {
+            // Buscar o pátio atual da moto (pode não estar na lista de pátios se patioIds foi especificado)
+            // Se não encontrar na lista filtrada, buscar no dicionário de todos os pátios
             var patioAtual = patios.FirstOrDefault(p => p.PatioId == moto.PatioId);
-            if (patioAtual == null) continue;
+            if (patioAtual == null)
+            {
+                // Buscar o pátio atual no dicionário de todos os pátios
+                if (!dicTodosPatios.TryGetValue(moto.PatioId, out patioAtual))
+                {
+                    Console.WriteLine($"[RedistribuicaoMLService] Moto {moto.MotoId} tem PátioId inválido: {moto.PatioId}");
+                    continue;
+                }
+                
+                Console.WriteLine($"[RedistribuicaoMLService] Moto {moto.MotoId} está no pátio {patioAtual.Nome} que não estava na lista de destinos filtrados");
+            }
 
             // Usar dicionário ao invés de acessar propriedade de navegação para evitar ciclo
             var quantidadeMotosAtual = quantidadeMotosPorPatio.GetValueOrDefault(patioAtual.PatioId, 0);
             var capacidadeAtual = patioAtual.Capacidade;
             var percentualOcupacaoAtual = capacidadeAtual > 0 ? (float)quantidadeMotosAtual / capacidadeAtual : 0f;
 
+            var totalAvaliacoesDestino = 0;
+            var totalRejeitadasCapacidade = 0;
+            
             foreach (var patioDestino in patios)
             {
                 if (patioDestino.PatioId == moto.PatioId) continue; // Não recomendar o mesmo pátio
 
+                totalAvaliacoesDestino++;
+                
                 // Verificar se pátio destino tem espaço disponível (não recomendar se já está lotado)
                 var quantidadeMotosDestino = quantidadeMotosPorPatio.GetValueOrDefault(patioDestino.PatioId, 0);
                 var capacidadeDestino = patioDestino.Capacidade;
                 var percentualOcupacaoDestino = capacidadeDestino > 0 ? (float)quantidadeMotosDestino / capacidadeDestino : 0f;
                 
                 // Não recomendar se pátio destino está lotado (>= 100% da capacidade)
-                if (quantidadeMotosDestino >= capacidadeDestino) continue;
+                if (quantidadeMotosDestino >= capacidadeDestino)
+                {
+                    totalRejeitadasCapacidade++;
+                    continue;
+                }
 
                 // Calcular distância entre pátios
                 var distanciaKm = CalcularDistancia(
@@ -279,6 +314,8 @@ public class RedistribuicaoMLService
                     Recomendacao = recomendacaoTexto
                 });
             }
+            
+            Console.WriteLine($"[RedistribuicaoMLService] Moto {moto.MotoId}: {totalAvaliacoesDestino} avaliações de destino, {totalRejeitadasCapacidade} rejeitadas por capacidade lotada");
         }
 
         // Agrupar por moto e selecionar apenas a melhor recomendação para cada moto
@@ -294,6 +331,8 @@ public class RedistribuicaoMLService
             .Take(50) // Limitar a 50 melhores recomendações
             .ToList();
 
+        Console.WriteLine($"[RedistribuicaoMLService] Total de recomendações brutas geradas: {recomendacoes.Count}, após agrupamento e filtro: {recomendacoesUnicas.Count}");
+        
         return recomendacoesUnicas;
     }
 

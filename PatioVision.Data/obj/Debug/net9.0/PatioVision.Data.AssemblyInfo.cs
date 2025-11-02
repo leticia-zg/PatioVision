@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PatioVision.Data")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5af8e85b73e49237060d846315d6f5077274f25e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3612b1e1c9bc0e1cbddc64a6865bd0651f982873")]
 [assembly: System.Reflection.AssemblyProductAttribute("PatioVision.Data")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PatioVision.Data")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
