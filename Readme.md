@@ -1,7 +1,6 @@
-
 # 🏍️ PatioVision
 
-## ✍️ Integrantes:
+## ✍️ Integrantes
 
 - [Letícia Zago de Souza](https://www.linkedin.com/in/letícia-zago-de-souza)
 - [Ana Carolina Reis Santana](https://www.linkedin.com/in/ana-carolina-santana-9a0a78232)
@@ -13,105 +12,82 @@
 
 - [Sobre o Projeto](#-sobre-o-projeto)
 - [Aplicação Interna](#-aplicação-interna)
-- [Rotas da API](#-rotas-da-api)
-- [Pré-requisitos](#-pré-requisitos)
-- [Como Instalar e Rodar](#-como-instalar-e-rodar-o-projeto)
-- [Autenticação](#-autenticação)
-- [Exemplo de Fluxo Básico](#-exemplo-de-fluxo-básico)
-- [Tutorial: Redistribuição ML](#-tutorial-usando-redistribuição-ml)
 - [Arquitetura e Tecnologias](#-arquitetura-e-tecnologias)
-- [Recursos Implementados](#-recursos-implementados)
+- [Pré-requisitos](#-pré-requisitos)
+- [Instalação e Configuração](#-instalação-e-configuração)
+- [Autenticação](#-autenticação)
+- [Rotas da API](#-rotas-da-api)
+- [Exemplo de Fluxo Básico](#-exemplo-de-fluxo-básico)
+- [Tutorial: Redistribuição ML](#-tutorial-redistribuição-ml)
+- [Executando os Testes](#-executando-os-testes)
+- [Como Contribuir](#-como-contribuir)
+- [Licença](#-licença)
 
 ---
 
 ## 📌 Sobre o Projeto
 
-O **PatioVision** é uma aplicação que permite o rastreamento e gerenciamento de motocicletas estacionadas em diferentes pátios, por meio de dispositivos IoT.  
-A solução facilita a localização das motos, especialmente em ambientes de grande movimentação, como centros logísticos, estacionamentos e áreas de manutenção.
+O **PatioVision** é uma aplicação que permite o rastreamento e gerenciamento de motocicletas estacionadas em diferentes pátios, por meio de dispositivos IoT. A solução facilita a localização das motos, especialmente em ambientes de grande movimentação, como centros logísticos, estacionamentos e áreas de manutenção.
 
-O projeto utiliza uma arquitetura em camadas, com:
+### Características Principais
 
-- API RESTful desenvolvida em ASP.NET Core
-- Camada Core com modelos e enums
-- Persistência com Entity Framework Core e banco de dados Oracle
+- 🎯 **Rastreamento em Tempo Real**: Localização de motos através de dispositivos IoT
+- 🤖 **Machine Learning**: Recomendações inteligentes de redistribuição de motos entre pátios
+- 🔐 **Autenticação Segura**: Sistema de autenticação JWT com BCrypt
+- 📊 **Monitoramento**: Health checks para verificação de saúde da API
+- 📝 **Documentação**: Swagger/OpenAPI integrado
 
 ---
 
 ## 🏢 Aplicação Interna
 
-Esta solução foi desenvolvida para uso exclusivo nos pátios da **Mottu**, com o objetivo de facilitar a localização e gestão de motocicletas em ambientes controlados.  
-O sistema permite que operadores da Mottu visualizem, atualizem e rastreiem motos com base em dados coletados por dispositivos IoT alocados nas motos e nos pátios.
+Esta solução foi desenvolvida para uso exclusivo nos pátios da **Mottu**, com o objetivo de facilitar a localização e gestão de motocicletas em ambientes controlados. O sistema permite que operadores da Mottu visualizem, atualizem e rastreiem motos com base em dados coletados por dispositivos IoT alocados nas motos e nos pátios.
 
 ---
 
-## 🔗 Rotas da API
+## 🏗️ Arquitetura e Tecnologias
 
-### 🛵 Motos
+### Estrutura do Projeto
 
-| Método | Rota                      | Descrição                                  | Status HTTP Esperado         |
-|--------|---------------------------|--------------------------------------------|-------------------------------|
-| GET    | `/api/motos`              | Lista todas as motos                       | 200 OK                        |
-| GET    | `/api/motos/{id}`         | Retorna uma moto específica pelo ID        | 200 OK / 404 Not Found        |
-| GET    | `/api/motos/status?valor=Disponivel` | Filtra motos por status         | 200 OK / 400 Bad Request      |
-| POST   | `/api/motos`              | Cadastra uma nova moto                     | 201 Created / 400 Bad Request |
-| PUT    | `/api/motos/{id}`         | Atualiza uma moto existente                | 204 No Content / 400 / 404    |
-| DELETE | `/api/motos/{id}`         | Remove uma moto                            | 204 No Content / 404          |
+```
+PatioVision/
+├── PatioVision.API/              # Camada de apresentação (Controllers, DTOs)
+├── PatioVision.Service/          # Camada de serviços e lógica de negócio
+├── PatioVision.Data/             # Camada de acesso a dados (DbContext, Migrations)
+├── PatioVision.Core/             # Modelos, Enums, Entidades
+├── PatioVision.Service.Tests/   # Testes unitários
+├── PatioVision.API.Tests/        # Testes de integração
+└── README.md                     # Este arquivo
+```
 
-### 🏢 Pátios
+### Stack Tecnológica
 
-| Método | Rota                      | Descrição                                  | Status HTTP Esperado         |
-|--------|---------------------------|--------------------------------------------|-------------------------------|
-| GET    | `/api/patios`             | Retorna todos os pátios cadastrados        | 200 OK                        |
-| GET    | `/api/patios/{id}`        | Detalha um pátio específico                | 200 OK / 404 Not Found        |
-| POST   | `/api/patios`             | Cria um novo pátio                     | 201 Created / 400 Bad Request |
-| PUT    | `/api/patios/{id}`        | Atualiza um pátio                          | 204 No Content / 400 / 404    |
-| DELETE | `/api/patios/{id}`        | Remove um pátio                            | 204 No Content / 404          |
+| Categoria | Tecnologia |
+|-----------|-----------|
+| **Framework** | ASP.NET Core 10.0 |
+| **ORM** | Entity Framework Core 9.0 |
+| **Banco de Dados** | Oracle Database |
+| **Autenticação** | JWT Bearer Token |
+| **Machine Learning** | ML.NET 3.0.1 com FastTree Regression |
+| **Health Checks** | AspNetCore.HealthChecks.Oracle 9.0 |
+| **API Versioning** | Asp.Versioning.Mvc 8.1.0 |
+| **Documentação** | Swagger/OpenAPI 3.0 |
+| **Testes Unitários** | xUnit, Moq, FluentAssertions |
+| **Testes Integração** | Microsoft.AspNetCore.Mvc.Testing |
 
-### 📡 Dispositivos IoT
+### Boas Práticas Implementadas
 
-| Método | Rota                           | Descrição                                  | Status HTTP Esperado         |
-|--------|--------------------------------|--------------------------------------------|-------------------------------|
-| GET    | `/api/dispositivos`           | Lista todos os dispositivos IoT            | 200 OK                        |
-| GET    | `/api/dispositivos/{id}`      | Detalha um dispositivo específico          | 200 OK / 404 Not Found        |
-| PATCH  | `/api/dispositivos/{id}/localizacao` | Atualiza a localização do dispositivo | 200 OK / 404 Not Found        |
-| POST   | `/api/dispositivos`           | Cadastra um novo dispositivo IoT           | 201 Created / 400 Bad Request |
-| DELETE | `/api/dispositivos/{id}`      | Remove um dispositivo IoT                  | 204 No Content / 404          |
-
-### 👥 Usuários
-
-| Método | Rota                      | Descrição                                  | Status HTTP Esperado         |
-|--------|---------------------------|--------------------------------------------|-------------------------------|
-| GET    | `/api/usuarios`           | Lista todos os usuários                    | 200 OK                        |
-| GET    | `/api/usuarios/{id}`      | Retorna um usuário específico              | 200 OK / 404 Not Found        |
-| POST   | `/api/usuarios`           | Registra um novo usuário                   | 201 Created / 400 Bad Request |
-| PUT    | `/api/usuarios/{id}`      | Atualiza um usuário existente              | 200 OK / 400 / 404            |
-| DELETE | `/api/usuarios/{id}`      | Remove um usuário                          | 204 No Content / 404          |
-
-### 🔐 Autenticação
-
-| Método | Rota                      | Descrição                                  | Status HTTP Esperado         |
-|--------|---------------------------|--------------------------------------------|-------------------------------|
-| POST   | `/api/v1/auth/login`      | Realiza login e retorna token JWT          | 200 OK / 401 Unauthorized    |
-
-### ❤️ Health Checks
-
-| Método | Rota                      | Descrição                                  | Status HTTP Esperado         |
-|--------|---------------------------|--------------------------------------------|-------------------------------|
-| GET    | `/health`                 | Verifica saúde geral da API                | 200 OK / 503 Service Unavailable |
-| GET    | `/health/live`            | Verifica se a API está viva                | 200 OK                        |
-| GET    | `/health/ready`           | Verifica se a API está pronta (Oracle OK)  | 200 OK / 503 Service Unavailable |
-
-### 🤖 ML - Redistribuição de Motos
-
-| Método | Rota                                  | Descrição                                  | Status HTTP Esperado         |
-|--------|---------------------------------------|--------------------------------------------|-------------------------------|
-| POST   | `/api/v1/redistribuicao/recomendar`  | Gera recomendações de redistribuição usando ML.NET | 200 OK / 400 / 500 |
-
-### 🌱 Seeder de Dados
-
-| Método | Rota                          | Descrição                                  | Status HTTP Esperado         |
-|--------|-------------------------------|--------------------------------------------|-------------------------------|
-| POST   | `/api/v1/seeder/ml-training-data` | Popula banco com dados de treinamento ML | 200 OK / 500                  |
+- ✅ **Clean Architecture** com separação de responsabilidades
+- ✅ **Repository Pattern** através de Services
+- ✅ **DTOs** para transferência de dados
+- ✅ **Validação de entrada** com Data Annotations
+- ✅ **Tratamento de erros** centralizado
+- ✅ **Logging** para debug e monitoramento
+- ✅ **Documentação XML** para Swagger
+- ✅ **HATEOAS** em respostas paginadas
+- ✅ **Migrações** para versionamento de schema
+- ✅ **AsNoTracking()** para performance em consultas read-only
+- ✅ **Testes unitários e de integração** com cobertura adequada
 
 ---
 
@@ -123,7 +99,7 @@ O sistema permite que operadores da Mottu visualizem, atualizem e rastreiem moto
 
 ---
 
-## ⚙️ Como Instalar e Rodar o Projeto
+## ⚙️ Instalação e Configuração
 
 ### 1. Clonar o Repositório
 
@@ -137,8 +113,15 @@ cd PatioVision
 Edite o arquivo `appsettings.json` do projeto `PatioVision.API` com a sua string de conexão Oracle:
 
 ```json
-"ConnectionStrings": {
-  "OracleConnection": "User Id=seu_usuario;Password=sua_senha;Data Source=//localhost:1521/XEPDB1;"
+{
+  "ConnectionStrings": {
+    "OracleConnection": "User Id=seu_usuario;Password=sua_senha;Data Source=//localhost:1521/XEPDB1;"
+  },
+  "Jwt": {
+    "Key": "SuaChaveSecretaSuperSeguraComPeloMenos32Caracteres",
+    "Issuer": "PatioVisionAPI",
+    "Audience": "PatioVisionUsers"
+  }
 }
 ```
 
@@ -151,7 +134,9 @@ dotnet run --project PatioVision.API
 
 ### 4. Acessar a Documentação Swagger
 
-```bash
+Após iniciar a aplicação, acesse:
+
+```
 http://localhost:{porta}/swagger
 ```
 
@@ -226,7 +211,85 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 **⚠️ Importante:**
 - O token JWT expira em 480 minutos (8 horas)
 - A maioria dos endpoints requer autenticação via `[Authorize]`
-- Apenas `/auth/login`, `/usuarios` (POST) e `/seeder/*` são públicos
+- Apenas `/api/v1/auth/login`, `/api/v1/usuarios` (POST) e `/api/v1/seeder/*` são públicos
+
+---
+
+## 🔗 Rotas da API
+
+Todas as rotas da API seguem o padrão `/api/v1/{recurso}`.
+
+### 🛵 Motos
+
+| Método | Rota | Descrição | Status HTTP |
+|--------|------|-----------|-------------|
+| GET | `/api/v1/motos` | Lista todas as motos (com paginação) | 200 OK |
+| GET | `/api/v1/motos/{id}` | Retorna uma moto específica pelo ID | 200 OK / 404 Not Found |
+| POST | `/api/v1/motos` | Cadastra uma nova moto | 201 Created / 400 Bad Request |
+| PUT | `/api/v1/motos/{id}` | Atualiza uma moto existente | 204 No Content / 400 / 404 |
+| DELETE | `/api/v1/motos/{id}` | Remove uma moto | 204 No Content / 404 |
+
+**Parâmetros de Consulta (GET):**
+- `pageNumber`: Número da página (padrão: 1)
+- `pageSize`: Tamanho da página, entre 1 e 100 (padrão: 10)
+- `search`: Filtro por modelo ou placa
+- `sort`: Ordenação (ex: `modelo`, `-modelo`, `dtcadastro`, `-dtcadastro`)
+
+### 🏢 Pátios
+
+| Método | Rota | Descrição | Status HTTP |
+|--------|------|-----------|-------------|
+| GET | `/api/v1/patios` | Retorna todos os pátios cadastrados | 200 OK |
+| GET | `/api/v1/patios/{id}` | Detalha um pátio específico | 200 OK / 404 Not Found |
+| POST | `/api/v1/patios` | Cria um novo pátio | 201 Created / 400 Bad Request |
+| PUT | `/api/v1/patios/{id}` | Atualiza um pátio | 204 No Content / 400 / 404 |
+| DELETE | `/api/v1/patios/{id}` | Remove um pátio | 204 No Content / 404 |
+
+### 📡 Dispositivos IoT
+
+| Método | Rota | Descrição | Status HTTP |
+|--------|------|-----------|-------------|
+| GET | `/api/v1/dispositivos` | Lista todos os dispositivos IoT | 200 OK |
+| GET | `/api/v1/dispositivos/{id}` | Detalha um dispositivo específico | 200 OK / 404 Not Found |
+| POST | `/api/v1/dispositivos` | Cadastra um novo dispositivo IoT | 201 Created / 400 Bad Request |
+| PATCH | `/api/v1/dispositivos/{id}/localizacao` | Atualiza a localização do dispositivo | 200 OK / 404 Not Found |
+| DELETE | `/api/v1/dispositivos/{id}` | Remove um dispositivo IoT | 204 No Content / 404 |
+
+### 👥 Usuários
+
+| Método | Rota | Descrição | Status HTTP |
+|--------|------|-----------|-------------|
+| GET | `/api/v1/usuarios` | Lista todos os usuários | 200 OK |
+| GET | `/api/v1/usuarios/{id}` | Retorna um usuário específico | 200 OK / 404 Not Found |
+| POST | `/api/v1/usuarios` | Registra um novo usuário | 201 Created / 400 Bad Request |
+| PUT | `/api/v1/usuarios/{id}` | Atualiza um usuário existente | 200 OK / 400 / 404 |
+| DELETE | `/api/v1/usuarios/{id}` | Remove um usuário | 204 No Content / 404 |
+
+### 🔐 Autenticação
+
+| Método | Rota | Descrição | Status HTTP |
+|--------|------|-----------|-------------|
+| POST | `/api/v1/auth/login` | Realiza login e retorna token JWT | 200 OK / 401 Unauthorized |
+
+### ❤️ Health Checks
+
+| Método | Rota | Descrição | Status HTTP |
+|--------|------|-----------|-------------|
+| GET | `/health` | Verifica saúde geral da API | 200 OK / 503 Service Unavailable |
+| GET | `/health/live` | Verifica se a API está viva | 200 OK |
+| GET | `/health/ready` | Verifica se a API está pronta (Oracle OK) | 200 OK / 503 Service Unavailable |
+
+### 🤖 ML - Redistribuição de Motos
+
+| Método | Rota | Descrição | Status HTTP |
+|--------|------|-----------|-------------|
+| POST | `/api/v1/redistribuicao/recomendar` | Gera recomendações de redistribuição usando ML.NET | 200 OK / 400 / 500 |
+
+### 🌱 Seeder de Dados
+
+| Método | Rota | Descrição | Status HTTP |
+|--------|------|-----------|-------------|
+| POST | `/api/v1/seeder/ml-training-data` | Popula banco com dados de treinamento ML | 200 OK / 500 |
 
 ---
 
@@ -234,7 +297,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
 **Nota:** Todos os exemplos abaixo assumem que você já obteve um token JWT válido através do endpoint `/api/v1/auth/login`.
 
-### 1. Cadastre um IOT de Pátio
+### 1. Cadastre um Dispositivo IoT de Pátio
 
 ```http
 POST /api/v1/dispositivos
@@ -265,7 +328,7 @@ Content-Type: application/json
 }
 ```
 
-### 3. Cadastre um IOT de Moto
+### 3. Cadastre um Dispositivo IoT de Moto
 
 ```http
 POST /api/v1/dispositivos
@@ -297,7 +360,7 @@ Content-Type: application/json
 
 ---
 
-## 🤖 Tutorial: Usando Redistribuição ML
+## 🤖 Tutorial: Redistribuição ML
 
 Este tutorial mostra como usar os recursos de Machine Learning para obter recomendações de redistribuição de motos entre pátios.
 
@@ -311,7 +374,6 @@ Antes de usar o endpoint de redistribuição, é necessário popular o banco de 
 - **100 usuários** com perfis variados
 
 **Executar o seeder:**
-
 ```http
 POST /api/v1/seeder/ml-training-data
 Authorization: Bearer {seu_token_jwt}
@@ -319,7 +381,6 @@ Content-Type: application/json
 ```
 
 **Resposta de sucesso:**
-
 ```json
 {
   "message": "Seeder executado com sucesso. Dados de treinamento ML foram populados no banco de dados.",
@@ -337,7 +398,6 @@ Content-Type: application/json
 Após popular os dados, você pode usar o endpoint de redistribuição para obter recomendações baseadas em ML.NET.
 
 **Recomendação para todas as motos disponíveis:**
-
 ```http
 POST /api/v1/redistribuicao/recomendar
 Authorization: Bearer {seu_token_jwt}
@@ -347,7 +407,6 @@ Content-Type: application/json
 ```
 
 **Recomendação para motos específicas:**
-
 ```http
 POST /api/v1/redistribuicao/recomendar
 Authorization: Bearer {seu_token_jwt}
@@ -362,7 +421,6 @@ Content-Type: application/json
 ```
 
 **Recomendação considerando apenas pátios específicos:**
-
 ```http
 POST /api/v1/redistribuicao/recomendar
 Authorization: Bearer {seu_token_jwt}
@@ -379,12 +437,7 @@ Content-Type: application/json
 
 ### Passo 3: Entender a Resposta
 
-A resposta do endpoint inclui:
-
-1. **Recomendações**: Lista ordenada por score (melhores primeiro)
-2. **Métricas**: Análise da distribuição atual vs proposta
-
-**Exemplo de resposta:**
+A resposta do endpoint inclui recomendações ordenadas por score e métricas detalhadas:
 
 ```json
 {
@@ -444,68 +497,72 @@ O modelo é treinado automaticamente na primeira chamada ao endpoint, usando os 
 
 ---
 
-## 🏗️ Arquitetura e Tecnologias
+## 🧪 Executando os Testes
 
-### Estrutura do Projeto
+O projeto possui dois tipos de testes: **testes unitários** e **testes de integração**.
 
+### Testes Unitários
+
+Os testes unitários estão localizados no projeto `PatioVision.Service.Tests` e testam a lógica principal dos serviços utilizando banco de dados em memória.
+
+**Executar todos os testes unitários:**
+```bash
+dotnet test PatioVision.Service.Tests
 ```
-PatioVision/
-├── PatioVision.API/              # Camada de apresentação (Controllers, DTOs)
-├── PatioVision.Service/          # Camada de serviços e lógica de negócio
-├── PatioVision.Data/             # Camada de acesso a dados (DbContext, Migrations)
-├── PatioVision.Core/             # Modelos, Enums, Entidades
-└── README.md                     # Este arquivo
+
+**Executar testes unitários com output detalhado:**
+```bash
+dotnet test PatioVision.Service.Tests --logger "console;verbosity=detailed"
 ```
 
-### Stack Tecnológica
+**Executar testes de um arquivo específico:**
+```bash
+dotnet test PatioVision.Service.Tests --filter "FullyQualifiedName~MotoServiceTests"
+```
 
-- **Framework:** ASP.NET Core 10.0
-- **ORM:** Entity Framework Core 9.0
-- **Banco de Dados:** Oracle Database
-- **Autenticação:** JWT Bearer Token
-- **ML:** ML.NET 3.0.1 com FastTree Regression
-- **Health Checks:** AspNetCore.HealthChecks.Oracle 9.0
-- **API Versioning:** Asp.Versioning.Mvc 8.1.0
-- **Documentação:** Swagger/OpenAPI 3.0
+### Testes de Integração
 
-### Boas Práticas Implementadas
+Os testes de integração estão localizados no projeto `PatioVision.API.Tests` e testam os endpoints da API de forma completa, incluindo autenticação, controllers e serviços.
 
-- ✅ **Clean Architecture** com separação de responsabilidades
-- ✅ **Repository Pattern** através de Services
-- ✅ **DTOs** para transferência de dados
-- ✅ **Validação de entrada** com Data Annotations
-- ✅ **Tratamento de erros** centralizado
-- ✅ **Logging** para debug e monitoramento
-- ✅ **Documentação XML** para Swagger
-- ✅ **HATEOAS** em respostas paginadas
-- ✅ **Migrações** para versionamento de schema
-- ✅ **AsNoTracking()** para performance em consultas read-only
+**Executar todos os testes de integração:**
+```bash
+dotnet test PatioVision.API.Tests
+```
 
----
+**Executar testes de integração com output detalhado:**
+```bash
+dotnet test PatioVision.API.Tests --logger "console;verbosity=detailed"
+```
 
-## 📊 Recursos Implementados
+**Executar testes de um controller específico:**
+```bash
+dotnet test PatioVision.API.Tests --filter "FullyQualifiedName~AuthControllerTests"
+```
 
-### Segurança e Autenticação
-- ✅ JWT Bearer Authentication
-- ✅ Hashing de senhas com BCrypt
-- ✅ Autorização baseada em atributos
-- ✅ Tokens com expiração configurável
+### Executar Todos os Testes
 
-### Monitoramento
-- ✅ Health Checks com múltiplas verificações
-- ✅ Status de disponibilidade e prontidão separados
-- ✅ Verificação de conectividade Oracle
+Para executar todos os testes (unitários e de integração) de uma vez:
 
-### Versionamento
-- ✅ Versionamento por URL segment (v1, v2, etc.)
-- ✅ Configuração de versão padrão
-- ✅ Report de versões suportadas nos headers
+```bash
+dotnet test
+```
 
-### Machine Learning
-- ✅ Treinamento automático de modelos
-- ✅ Previsões em tempo real
-- ✅ Métricas de qualidade do modelo
-- ✅ Dados sintéticos para treinamento
+### Observações Importantes
+
+- Os testes de integração utilizam banco de dados **InMemory** do Entity Framework Core, não sendo necessário ter o Oracle configurado para executar os testes
+- Os testes são executados em ambientes isolados, cada teste tem seu próprio contexto de banco de dados
+- Os testes de integração que requerem autenticação criam automaticamente um usuário de teste e obtêm um token JWT válido
+
+### Estrutura dos Testes
+
+**Testes Unitários (`PatioVision.Service.Tests`):**
+- `MotoServiceTests.cs` - Testa CRUD, paginação, filtros e validações do serviço de motos
+- `AuthServiceTests.cs` - Testa autenticação, geração de JWT e validação de email
+- `RedistribuicaoServiceTests.cs` - Testa cálculo de métricas e recomendações de redistribuição
+
+**Testes de Integração (`PatioVision.API.Tests`):**
+- `AuthControllerTests.cs` - Testa endpoint de login com fluxo completo
+- `MotosControllerTests.cs` - Testa endpoints CRUD de motos com autenticação
 
 ---
 
@@ -531,4 +588,3 @@ Desenvolvido com 💚 por:
 - **Letícia Zago de Souza** - [LinkedIn](https://www.linkedin.com/in/letícia-zago-de-souza)
 - **Ana Carolina Reis Santana** - [LinkedIn](https://www.linkedin.com/in/ana-carolina-santana-9a0a78232)
 - **Celina Alcântara do Carmo** - [LinkedIn](https://www.linkedin.com/in/celinaalcantara)
-
