@@ -576,12 +576,6 @@ dotnet test
 
 ---
 
-## 📄 Licença
-
-Este projeto é de uso exclusivo interno da **Mottu** e não está disponível para distribuição pública.
-
----
-
 ## 👥 Equipe de Desenvolvimento
 
 Desenvolvido com 💚 por:
